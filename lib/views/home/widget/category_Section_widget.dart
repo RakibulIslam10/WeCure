@@ -10,7 +10,7 @@ class CategorySectionWidget extends GetView<HomeController> {
       height: 120.h,
       child: ListView.builder(
         physics: BouncingScrollPhysics(),
-        itemCount: 10,
+        itemCount: controller.specialitiesList.length,
         addRepaintBoundaries: true,
         cacheExtent: 500,
         shrinkWrap: true,
@@ -35,8 +35,7 @@ class CategorySectionWidget extends GetView<HomeController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CachedNetworkImage(
-                  imageUrl:
-                      'https://www.iconpacks.net/icons/2/free-medicine-icon-3193-thumb.png',
+                  imageUrl: controller.specialitiesList[index].thumbnail ?? "https://www.iconpacks.net/icons/2/free-medicine-icon-3193-thumb.png",
                   height: 35.h,
                   // color: CustomColors.primary,
                   errorWidget: (_, __, ___) => Icon(

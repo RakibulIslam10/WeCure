@@ -17,15 +17,20 @@ class HomeDoctorCardWidget extends GetView<HomeController> {
         scrollDirection: Axis.horizontal,
         itemCount: 10,
         itemBuilder: (context, index) => DoctorCardWidget(
-          imageUrl:
-              'https://raw.githubusercontent.com/ai-py-auto/souce/refs/heads/main/Rectangle%202.png',
-          rating: '4.7',
-          name: 'Elowyn Starcrest',
-          profession: 'Psychologist',
+          imageUrl: controller.allDoctorsList[index].profileImage ?? '',
+          rating:
+              controller.allDoctorsList[index].averageRating.toStringAsFixed(
+                1,
+              ) ??
+              '0.0',
+          name: controller.allDoctorsList[index].name,
+          profession: controller.allDoctorsList[index].specialty,
           onTap: () {
             Get.toNamed(Routes.doctorDetailsScreen);
           },
-          hospital: 'Central Dental Care',
+          hospital:
+              controller.allDoctorsList[index].currentOrganization ??
+              'Unknown Hospital',
         ),
       ),
     );

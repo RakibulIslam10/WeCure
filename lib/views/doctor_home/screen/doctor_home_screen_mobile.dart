@@ -89,6 +89,7 @@ class DoctorHomeScreenMobile extends GetView<DoctorHomeController> {
                         ),
                       ),
                       Space.height.v20,
+
                       // ListView.builder(
                       //   itemCount:
                       //       controller
@@ -128,11 +129,19 @@ class DoctorHomeScreenMobile extends GetView<DoctorHomeController> {
                       //     );
                       //   },
                       // ),
-
-                      if ((controller.dashboardModel.value?.data.upcomingAppointments.length ?? 0) == 0)
+                      if ((controller
+                                  .dashboardModel
+                                  .value
+                                  ?.data
+                                  .upcomingAppointments
+                                  .length ??
+                              0) ==
+                          0)
                         Center(
                           child: Padding(
-                            padding: EdgeInsets.only(top: Dimensions.heightSize * 5),
+                            padding: EdgeInsets.only(
+                              top: Dimensions.heightSize * 5,
+                            ),
                             child: TextWidget(
                               'No upcoming appointments',
                               color: CustomColors.grayShade,
@@ -142,25 +151,39 @@ class DoctorHomeScreenMobile extends GetView<DoctorHomeController> {
                         )
                       else
                         ListView.builder(
-                          itemCount: controller.dashboardModel.value!.data.upcomingAppointments.length,
+                          itemCount: controller
+                              .dashboardModel
+                              .value!
+                              .data
+                              .upcomingAppointments
+                              .length,
                           addRepaintBoundaries: true,
                           cacheExtent: 500,
                           shrinkWrap: true,
                           primary: false,
                           physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            final appointment = controller.dashboardModel.value!.data.upcomingAppointments[index];
+                            final appointment = controller
+                                .dashboardModel
+                                .value!
+                                .data
+                                .upcomingAppointments[index];
                             return Padding(
-                              padding: EdgeInsets.only(bottom: Dimensions.heightSize),
+                              padding: EdgeInsets.only(
+                                bottom: Dimensions.heightSize,
+                              ),
                               child: RequestCard(
                                 name: appointment.patientName,
                                 service: appointment.reasonTitle,
                                 time: appointment.timeRange,
-                                status: DateFormat("dd MMMM").format(DateTime.parse(appointment.date)),
+                                status: DateFormat(
+                                  "dd MMMM",
+                                ).format(DateTime.parse(appointment.date)),
                                 buttonTitle: 'View',
                                 cardOnTap: () {
-                                  Get.toNamed(Routes.appointmentDetailsScreen,
-                                      arguments: appointment.id
+                                  Get.toNamed(
+                                    Routes.appointmentDetailsScreen,
+                                    arguments: appointment.id,
                                   );
                                 },
                               ),

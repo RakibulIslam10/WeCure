@@ -27,26 +27,28 @@ class ProfileBoxWidget extends StatelessWidget {
             mainAxisAlignment: mainSpaceBet,
             children: [
               CustomLogoWidget(size: 40.h),
-              TextButton(
-                style: TextButton.styleFrom(
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.defaultHorizontalSize * 0.5,
-                    vertical: Dimensions.verticalSize * 0.25,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(Dimensions.radius * 2),
-                    side: BorderSide(color: CustomColors.primary),
-                  ),
-                ),
-                onPressed: () {},
-                child: TextWidget(
-                  'ID : 052415',
-                  fontSize: Dimensions.titleSmall,
-                  color: CustomColors.primary,
-                ),
-              ),
+              // TextButton(
+              //   style: TextButton.styleFrom(
+              //     minimumSize: Size.zero,
+              //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              //     padding: EdgeInsets.symmetric(
+              //       horizontal: Dimensions.defaultHorizontalSize * 0.5,
+              //       vertical: Dimensions.verticalSize * 0.25,
+              //     ),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(Dimensions.radius * 2),
+              //       side: BorderSide(color: CustomColors.primary),
+              //     ),
+              //   ),
+              //   onPressed: () {},
+              //   child: TextWidget(
+              //     'ID : 052415',
+              //     fontSize: Dimensions.titleSmall,
+              //     color: CustomColors.primary,
+              //   ),
+              // ),
+
+              SizedBox()
             ],
           ),
 
@@ -117,54 +119,26 @@ class ProfileBoxWidget extends StatelessWidget {
                 ),
               ),
               Space.height.v20,
-              Row(
-                mainAxisAlignment: mainSpaceBet,
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => Get.toNamed(Routes.updateProfileScreen),
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: CustomColors.primary,
+              GestureDetector(
+                onTap: () => Get.toNamed(Routes.updateProfileScreen),
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: CustomColors.primary,
 
-                          borderRadius: BorderRadius.circular(
-                            Dimensions.radius,
-                          ),
-                        ),
-                        padding: EdgeInsetsGeometry.symmetric(
-                          horizontal: Dimensions.defaultHorizontalSize * 2,
-                          vertical: Dimensions.verticalSize * 0.4,
-                        ),
-                        child: TextWidget(
-                          'Edit Profile',
-                          color: CustomColors.whiteColor,
-                        ),
-                      ),
+                    borderRadius: BorderRadius.circular(
+                      Dimensions.radius,
                     ),
                   ),
-                  Space.width.v10,
-                  if (AppStorage.isUser == 'USER')
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: CustomColors.whiteColor,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: Dimensions.defaultHorizontalSize,
-                          vertical: Dimensions.verticalSize * 0.4,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            Dimensions.radius,
-                          ),
-                          side: BorderSide(color: CustomColors.borderColor),
-                        ),
-                      ),
-                      onPressed: () {},
-                      child: TextWidget("QR CODE", color: CustomColors.primary),
-                    ),
-                ],
+                  padding: EdgeInsetsGeometry.symmetric(
+                    horizontal: Dimensions.defaultHorizontalSize * 2,
+                    vertical: Dimensions.verticalSize * 0.4,
+                  ),
+                  child: TextWidget(
+                    'Edit Profile',
+                    color: CustomColors.whiteColor,
+                  ),
+                ),
               ),
             ],
           ),
@@ -219,9 +193,7 @@ class DoctorProfileBox extends GetView<ProfileController> {
               SizedBox()
             ],
           ),
-
-
-                    ProfileAvatarWidget(
+          ProfileAvatarWidget(
             imageUrl:
                 controller.doctorProfileModel?.data.userId.profileImage ?? ''  ,
 

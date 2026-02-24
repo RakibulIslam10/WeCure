@@ -115,4 +115,7 @@ class Patient {
     allergies: List<String>.from(json["allergies"].map((x) => x)),
   );
 
+
+
+
 }

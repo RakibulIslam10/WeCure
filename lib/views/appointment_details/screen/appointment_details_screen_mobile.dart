@@ -7,6 +7,7 @@ class AppointmentDetailsScreenMobile
   @override
   Widget build(BuildContext context) {
     var patient = controller.doctorAppointmentDetailsModel?.data.patient;
+    var data = controller.doctorAppointmentDetailsModel?.data;
 
     return Scaffold(
       bottomNavigationBar: SafeArea(
@@ -73,126 +74,146 @@ class AppointmentDetailsScreenMobile
 
       appBar: CommonAppBar(title: "Details"),
       body: SafeArea(
-        child: ListView(
-          padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-          physics: BouncingScrollPhysics(),
-          children: [
-            Space.height.v15,
+        child: Obx(
+          () => controller.isLoading.value
+              ? LoadingWidget()
+              : ListView(
+                  padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
+                  physics: BouncingScrollPhysics(),
+                  children: [
+                    Space.height.v15,
 
-            if (AppStorage.isUser == 'USER')
-              DoctorDetailsCard(
-                imageUrl:
-                    'https://raw.githubusercontent.com/ai-py-auto/souce/refs/heads/main/Rectangle%202.png',
-                name: 'Dr. Elowyn Starcrest',
-                specialty: 'Dentist',
-                clinicName: 'Central Dental Care',
-                rating: 4.7,
-                yearsOfExperience: 12,
-                startingPrice: 10,
-                onTap: () {},
-              ),
+                    if (AppStorage.isUser == 'USER')
+                      DoctorDetailsCard(
+                        imageUrl:
+                            'https://raw.githubusercontent.com/ai-py-auto/souce/refs/heads/main/Rectangle%202.png',
+                        name: 'Dr. Elowyn Starcrest',
+                        specialty: 'Dentist',
+                        clinicName: 'Central Dental Care',
+                        rating: 4.7,
+                        yearsOfExperience: 12,
+                        startingPrice: 10,
+                        onTap: () {},
+                      ),
 
-            if (AppStorage.isUser != 'USER')
-              PatientInfoWidgetWithAsset(
-                patientImageNetwork: patient?.profileImage ?? 'N/A',
-                patientName: patient?.name ?? 'N/A',
-                dateOfBirth: patient != null
-                    ? "${patient.dateOfBirth.day}/${patient.dateOfBirth.month}/${patient.dateOfBirth.year}"
-                    : 'N/A',
+                    if (AppStorage.isUser != 'USER')
+                      PatientInfoWidgetWithAsset(
+                        patientImageNetwork: patient?.profileImage ?? 'N/A',
+                        patientName: patient?.name ?? 'N/A',
+                        dateOfBirth: patient != null
+                            ? "${patient.dateOfBirth.day}/${patient.dateOfBirth.month}/${patient.dateOfBirth.year}"
+                            : 'N/A',
 
-                phoneNumber: patient?.phone ?? 'N/A',
-                bloodGroup: patient?.bloodGroup ?? 'N/A',
-                allergies: patient != null
-                    ? (patient.allergies.isNotEmpty
-                          ? patient.allergies
-                          : ['None'])
-                    : ['N/A'],
-              ),
+                        phoneNumber: patient?.phone ?? 'N/A',
+                        bloodGroup: patient?.bloodGroup ?? 'N/A',
+                        allergies: patient != null
+                            ? (patient.allergies.isNotEmpty
+                                  ? patient.allergies
+                                  : ['None'])
+                            : ['N/A'],
+                      ),
 
-            TextWidget(
-              padding: EdgeInsetsGeometry.symmetric(
-                vertical: Dimensions.verticalSize,
-              ),
-              'Appointment Details',
-            ),
+                    TextWidget(
+                      padding: EdgeInsetsGeometry.symmetric(
+                        vertical: Dimensions.verticalSize,
+                      ),
+                      'Appointment Details',
+                    ),
 
-            InfoPairRow(
-              leftTitle: 'Visit reason',
-              leftValue: 'Professional cleaning',
-              rightTitle: 'Booking Date',
-              rightValue: '7 November',
-            ),
-            Space.height.v15,
+                    InfoPairRow(
+                      leftTitle: data?.reasonTitle ?? '',
+                      leftValue: data?.reasonDetails ?? '',
+                      rightTitle: 'Booking Date',
+                      rightValue: () {
+                        final date = data?.appointmentDate;
 
-            TextWidget(
-              padding: EdgeInsetsGeometry.only(
-                top: Dimensions.heightSize,
-                bottom: Dimensions.heightSize * 0.5,
-              ),
-              'Details',
-              fontSize: Dimensions.titleSmall,
-              fontWeight: FontWeight.bold,
-            ),
+                        if (date == null) return 'N/A';
 
-            TextWidget(
-              textAlign: TextAlign.justify,
-              fontSize: Dimensions.titleSmall,
-              fontWeight: FontWeight.w400,
-              '''
+                        return DateFormat("dd MMM yyyy").format(date.toLocal());
+                      }(),
+                    ),
+                    Space.height.v15,
+
+                    TextWidget(
+                      padding: EdgeInsetsGeometry.only(
+                        top: Dimensions.heightSize,
+                        bottom: Dimensions.heightSize * 0.5,
+                      ),
+                      'Details',
+                      fontSize: Dimensions.titleSmall,
+                      fontWeight: FontWeight.bold,
+                    ),
+
+                    TextWidget(
+                      textAlign: TextAlign.justify,
+                      fontSize: Dimensions.titleSmall,
+                      fontWeight: FontWeight.w400,
+                      '''
               the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.
               ''',
-            ),
-
-            Space.height.v15,
-
-            InfoPairRow(
-              leftTitle: 'Visiting Date',
-              leftValue: '21 November\n6:30 PM',
-              rightTitle: 'Status',
-              rightValue: 'Pending',
-            ),
-            Space.height.v15,
-
-            TextWidget("Appointment Fee", fontWeight: FontWeight.w400),
-            TextWidget("\$12", fontWeight: FontWeight.bold),
-            Space.height.v15,
-
-            TextWidget(
-              padding: EdgeInsetsGeometry.only(bottom: Dimensions.heightSize),
-              "Attachment",
-              fontWeight: FontWeight.bold,
-            ),
-
-            Wrap(
-              children: List.generate(
-                3,
-                (index) => Container(
-                  height: 100.h,
-                  width: 100.w,
-                  margin: EdgeInsets.only(right: Dimensions.widthSize),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: CustomColors.grayShade.withOpacity(0.7),
                     ),
-                    borderRadius: BorderRadius.circular(Dimensions.radius),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(Dimensions.radius),
-                    child: CachedNetworkImage(
-                      imageUrl:
-                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqGVGf1MbRIenHlupz_bqCZCCzq0zH9sS0BQ&s',
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => Icon(
-                        Icons.image_not_supported,
-                        color: CustomColors.grayShade,
-                        size: Dimensions.iconSizeLarge,
+
+                    Space.height.v15,
+
+                    InfoPairRow(
+                      leftTitle: 'Visiting Date',
+                      leftValue: '21 November\n6:30 PM',
+                      rightTitle: 'Status',
+                      rightValue: 'Pending',
+                    ),
+                    Space.height.v15,
+
+                    TextWidget("Appointment Fee", fontWeight: FontWeight.w400),
+                    TextWidget(
+                      data?.consultationFee.toString() ?? ''.toString(),
+                      fontWeight: FontWeight.bold,
+                    ),
+                    Space.height.v15,
+
+                    TextWidget(
+                      padding: EdgeInsetsGeometry.only(
+                        bottom: Dimensions.heightSize,
+                      ),
+                      "Attachment",
+                      fontWeight: FontWeight.bold,
+                    ),
+
+                    Wrap(
+                      children: List.generate(
+                        data?.attachments.length ?? 0,
+                        (index) => Container(
+                          height: 100.h,
+                          width: 100.w,
+                          margin: EdgeInsets.only(right: Dimensions.widthSize),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: CustomColors.grayShade.withOpacity(0.7),
+                            ),
+                            borderRadius: BorderRadius.circular(
+                              Dimensions.radius,
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              Dimensions.radius,
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: (data?.attachments.isNotEmpty ?? false)
+                                  ? data!.attachments[index].url
+                                  : 'https://via.placeholder.com/150',
+                              fit: BoxFit.cover,
+                              errorWidget: (context, url, error) => Icon(
+                                Icons.image_not_supported,
+                                color: CustomColors.grayShade,
+                                size: Dimensions.iconSizeLarge,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ),
-            ),
-          ],
         ),
       ),
     );

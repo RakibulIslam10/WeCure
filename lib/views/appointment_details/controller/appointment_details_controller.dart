@@ -28,4 +28,8 @@ class AppointmentDetailsController extends GetxController {
       },
     );
   }
+
+
+
+
 }

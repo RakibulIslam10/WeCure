@@ -21,8 +21,8 @@ class PopularDoctorModel {
 
 class AllDoctors {
   final String id;
-  final String currentOrganization;
-  final int totalReviews;
+  final dynamic currentOrganization;
+  final dynamic totalReviews;
   final String name;
   final String profileImage;
   final String specialty;
@@ -40,11 +40,11 @@ class AllDoctors {
 
   factory AllDoctors.fromJson(Map<String, dynamic> json) => AllDoctors(
     id: json["_id"],
-    currentOrganization: json["currentOrganization"],
-    totalReviews: json["totalReviews"],
-    name: json["name"],
-    profileImage: json["profileImage"],
-    specialty: json["specialty"],
-    averageRating: json["averageRating"],
+    currentOrganization: json["currentOrganization"] ?? '',
+    totalReviews: json["totalReviews"] ?? 0,
+    name: json["name"] ?? '',
+    profileImage: json["profileImage"] ?? '',
+    specialty: json["specialty"] ?? '',
+    averageRating: json["averageRating"] ?? 0,
   );
 }
