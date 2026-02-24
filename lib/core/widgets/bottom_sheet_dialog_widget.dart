@@ -63,7 +63,7 @@ class BottomSheetDialogWidget extends StatelessWidget {
           if (isInputField == true) ...[
             PrimaryInputFieldWidget(
               controller: inputController ?? TextEditingController(),
-              hintText: 'Enter Account Password',
+              hintText: 'Write a reason',
             ),
             Space.height.betweenInputBox,
           ],

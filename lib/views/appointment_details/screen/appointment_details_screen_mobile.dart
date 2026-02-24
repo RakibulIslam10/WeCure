@@ -29,14 +29,16 @@ class AppointmentDetailsScreenMobile
                           context: context,
                           builder: (context) => BottomSheetDialogWidget(
                             titleColor: CustomColors.rejected,
-                            title: 'Cancel Request',
-                            subTitle: 'Are you sure you want to Cancel this request',
+                            isInputField: true,
+                            title: 'Reject Request',
+                            subTitle: 'write a reason for rejecting the appointment request',
                             isLoading: false.obs,
+                            buttonTex: 'Reject',
                             action: () {},
                           ),
                         );
                       },
-                      title: 'Cancel  Appointment',
+                      title: 'Reject  Appointment',
                     ),
                   ),
                   Space.width.v10,
@@ -57,10 +59,10 @@ class AppointmentDetailsScreenMobile
                   ),
                 ],
               ),
-              if(AppStorage.isUser != 'USER')...[
-                Space.height.v15,
-                PrimaryButtonWidget(title: "Accept Request", onPressed: () {},),
-              ]
+              // if(AppStorage.isUser != 'USER')...[
+              //   Space.height.v15,
+              //   PrimaryButtonWidget(title: "Accept Request", onPressed: () {},),
+              // ]
             ],
           ),
         ),
