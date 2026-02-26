@@ -10,7 +10,8 @@ class TipsCardWidget extends GetView<HomeController> {
         height: 140.h,
         child: ListView.builder(
           itemCount:
-              controller.wellnessTipsList.length + (controller.tipsHasMore.value ? 1 : 0),
+              controller.wellnessTipsList.length +
+              (controller.tipsHasMore.value ? 1 : 0),
           scrollDirection: Axis.horizontal,
           physics: const BouncingScrollPhysics(),
           padding: EdgeInsets.symmetric(
@@ -25,7 +26,9 @@ class TipsCardWidget extends GetView<HomeController> {
               });
               return Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal:  Dimensions.paddingSize * 0.5),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Dimensions.paddingSize * 0.5,
+                  ),
                   child: CircularProgressIndicator(color: CustomColors.primary),
                 ),
               );
@@ -69,7 +72,7 @@ class TipsCardWidget extends GetView<HomeController> {
                         ),
                         padding: EdgeInsets.all(Dimensions.paddingSize * 0.3),
                         child: Icon(
-                          tip.isFavourite
+                          tip.isFavourite == true
                               ? Icons.favorite
                               : Icons.favorite_border,
                           size: Dimensions.iconSizeLarge * 0.8,
