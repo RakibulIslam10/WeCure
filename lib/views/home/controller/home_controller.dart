@@ -1,3 +1,4 @@
+import 'package:glady/core/api/model/basic_success_model.dart';
 import 'package:glady/core/api/services/api_request.dart';
 import 'package:glady/views/home/model/popular_doctor_model.dart';
 import '../../../core/api/end_point/api_end_points.dart';
@@ -100,4 +101,27 @@ class HomeController extends GetxController {
       },
     );
   }
+
+
+  RxBool isTogglingFavorite = false.obs;
+
+  Future<void> toggleFavorite(String tipId, int index) async {
+    wellnessTipsList[index].isFavourite = !wellnessTipsList[index].isFavourite;
+    wellnessTipsList.refresh();
+
+    try {
+      await ApiRequest().patch(
+        isLoading: isTogglingFavorite,
+        endPoint: '/wellness-tips/$tipId/like',
+        body: {},
+        fromJson: BasicSuccessModel.fromJson,
+        onSuccess: (result) {},
+      );
+    } catch (e) {
+      wellnessTipsList[index].isFavourite = !wellnessTipsList[index].isFavourite;
+      wellnessTipsList.refresh();
+    }
+  }
+
+
 }

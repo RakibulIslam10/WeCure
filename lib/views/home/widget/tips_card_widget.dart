@@ -64,7 +64,7 @@ class TipsCardWidget extends GetView<HomeController> {
                       ),
                     ),
                     InkWell(
-                      // onTap: () => controller.toggleFavorite(tip.id, index),
+                      onTap: () => controller.toggleFavorite(tip.id, index),
                       child: Container(
                         decoration: const BoxDecoration(
                           color: CustomColors.blackColor,

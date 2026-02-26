@@ -9,7 +9,7 @@ class ProfileScreenMobile extends GetView<ProfileController> {
       appBar: CommonAppBar(title: "Profile", isBack: false),
       body: SafeArea(
         child: Obx(
-          () => controller.getDoctorProfileLoading.value
+          () => controller.getDoctorProfileLoading.value || controller.getUserProfileLoading.value
               ? LoadingWidget()
               : RefreshIndicator(
                   color: CustomColors.primary,

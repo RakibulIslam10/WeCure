@@ -32,7 +32,7 @@ class AllTips {
   final DateTime createdAt;
   final DateTime updatedAt;
   final int v;
-  final bool isFavourite;
+   bool isFavourite;
 
   AllTips({
     required this.id,

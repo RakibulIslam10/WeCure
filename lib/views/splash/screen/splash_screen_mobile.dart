@@ -6,7 +6,7 @@ class SplashScreenMobile extends GetView<SplashController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: Center(child: Image.asset(Assets.dummy.d.path,fit: BoxFit.cover,)),)
+      body: Center(child: Image.asset(Assets.dummy.d.path, fit: BoxFit.cover)),
     );
   }
 }

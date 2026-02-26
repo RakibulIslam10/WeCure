@@ -4,6 +4,7 @@ import 'package:glady/views/profile/model/doctor_profile_model.dart';
 import '../../../core/api/services/auth_services.dart';
 import '../../../core/utils/app_storage.dart';
 import '../../../core/utils/basic_import.dart';
+import '../model/user_profile_model.dart';
 
 class ProfileController extends GetxController {
   List<Map<String, dynamic>> profileList = [
@@ -57,6 +58,19 @@ class ProfileController extends GetxController {
       isLoading: getDoctorProfileLoading,
       onSuccess: (result) {
         doctorProfileModel = result;
+      },
+    );
+  }
+
+  UserProfileModel ? userProfileModel;
+  RxBool getUserProfileLoading = false.obs;
+  Future<UserProfileModel> getUserProfile() async {
+    return await ApiRequest().get(
+      fromJson: UserProfileModel.fromJson,
+      endPoint: ApiEndPoints.userProfile,
+      isLoading: getUserProfileLoading,
+      onSuccess: (result) {
+        userProfileModel = result;
       },
     );
   }

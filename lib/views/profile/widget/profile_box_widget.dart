@@ -5,7 +5,7 @@ import '../../../core/utils/basic_import.dart';
 import '../../../core/widgets/profile_avater_widget.dart';
 import '../../../widgets/custom_logo_widget.dart';
 
-class ProfileBoxWidget extends StatelessWidget {
+class ProfileBoxWidget extends GetView<ProfileController> {
   const ProfileBoxWidget({super.key});
 
   @override
@@ -53,16 +53,14 @@ class ProfileBoxWidget extends StatelessWidget {
           ),
 
           ProfileAvatarWidget(
-            imageUrl:
-                'https://raw.githubusercontent.com/ai-py-auto/souce/refs/heads/main/Rectangle%202.png',
-
+            imageUrl: controller.userProfileModel?.data.profileImage ?? ''  ,
             size: 100,
           ),
           Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             spacing: Dimensions.widthSize * 0.8,
             children: [
-              TextWidget("Luna Kellan"),
+              TextWidget(controller.userProfileModel?.data.name ?? ""),
               TextButton(
                 style: TextButton.styleFrom(
                   minimumSize: Size.zero,
@@ -92,7 +90,7 @@ class ProfileBoxWidget extends StatelessWidget {
             color: Colors.black.withOpacity(0.7),
           ),
           TextWidget(
-            '+1154521 854854',
+          ',${controller.userProfileModel?.data.phone ?? ''}',
             fontSize: Dimensions.titleSmall,
             color: Colors.black.withOpacity(0.7),
           ),
@@ -106,13 +104,13 @@ class ProfileBoxWidget extends StatelessWidget {
               Space.height.v10,
               Wrap(
                 children: List.generate(
-                  4,
+                  controller.userProfileModel?.data.allergies.length ?? 0,
                   (index) => TextWidget(
                     padding: EdgeInsetsGeometry.only(
                       right: Dimensions.widthSize * 2,
                       bottom: Dimensions.heightSize,
                     ),
-                    'food allergies',
+                    controller.userProfileModel?.data.allergies[index].toString() ?? '',
                     fontSize: Dimensions.titleSmall,
                     color: CustomColors.grayShade,
                   ),

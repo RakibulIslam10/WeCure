@@ -1,4 +1,3 @@
-
 import '../../../core/utils/basic_import.dart';
 
 class PatientInfoWidgetWithAsset extends StatelessWidget {
@@ -98,9 +97,7 @@ class PatientInfoWidgetWithAsset extends StatelessWidget {
             fontSize: Dimensions.titleMedium,
             fontWeight: FontWeight.w600,
           ),
-
           SizedBox(height: 8.h),
-
           Wrap(
             spacing: 8.w,
             runSpacing: 8.h,
