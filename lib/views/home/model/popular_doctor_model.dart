@@ -26,7 +26,7 @@ class AllDoctors {
   final String name;
   final String profileImage;
   final String specialty;
-  final int averageRating;
+  final dynamic averageRating;
 
   AllDoctors({
     required this.id,
@@ -45,6 +45,6 @@ class AllDoctors {
     name: json["name"] ?? '',
     profileImage: json["profileImage"] ?? '',
     specialty: json["specialty"] ?? '',
-    averageRating: json["averageRating"] ?? 0,
+    averageRating: json["averageRating"],
   );
 }

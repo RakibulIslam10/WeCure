@@ -11,6 +11,7 @@ import '../../../core/utils/basic_import.dart';
 import '../../../core/widgets/common_app_bar.dart';
 import '../../../widgets/section_header.dart';
 import '../controller/home_controller.dart';
+import '../widget/shimmer.dart';
 
 part 'home_screen_mobile.dart';
 part '../widget/my_app_bar_widget.dart';

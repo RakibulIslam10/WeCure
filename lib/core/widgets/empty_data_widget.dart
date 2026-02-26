@@ -1,4 +1,5 @@
 import '../utils/basic_import.dart';
+
 class EmptyDataWidget extends StatelessWidget {
   final String? massage;
 
@@ -14,7 +15,7 @@ class EmptyDataWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // SvgPicture.asset(Assets.icons.empty),
+            SvgPicture.asset(Assets.icons.empty),
             Space.height.v5,
             TextWidget(
               maxLines: 2,

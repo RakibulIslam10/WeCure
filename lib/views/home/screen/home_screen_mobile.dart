@@ -12,7 +12,9 @@ class HomeScreenMobile extends GetView<HomeController> {
       ),
       body: SafeArea(
         child: Obx(
-          () => controller.isLoading.value ? LoadingWidget() : _bodyWidget(),
+          () => controller.isLoading.value
+              ? UserHomeShimmerWidget()
+              : _bodyWidget(),
         ),
       ),
     );

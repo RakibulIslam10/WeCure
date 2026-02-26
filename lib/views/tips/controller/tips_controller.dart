@@ -3,38 +3,47 @@ import '../../../core/api/services/api_request.dart';
 import '../../../core/utils/basic_import.dart';
 import '../../home/model/wellness_tips_model.dart';
 
-
 class TipsController extends GetxController {
+  // ── Wellness Tips ──
+  RxList<AllTips> wellnessTipsList = <AllTips>[].obs;
+  RxList<AllTips> wellnessLickedTipsList = <AllTips>[].obs;
+  RxBool isLoadingWellnessTips = false.obs;
+  RxInt tipsCurrentPage = 1.obs;
+  RxInt tipsTotalPages = 1.obs;
+  RxBool tipsHasMore = true.obs;
 
-
-  /// Fetch Wellness Tips
-  // Pagination
-  RxInt currentPage = 1.obs;
-  RxInt totalPages = 1.obs;
-  RxBool hasMore = true.obs;
   final int limit = 10;
 
-  RxBool isLoadingTips = false.obs;
-  RxList<AllTips> wellnessTipsList = <AllTips>[].obs;
+  @override
+  void onInit() {
+    super.onInit();
+    fetchWellnessTips();
 
-  Future<void> fetchWellnessTips() async {
-    if (!hasMore.value) return;
-    await ApiRequest().get(
+
+
+  }
+
+  Future<WellnessTipModel> fetchWellnessTips() async {
+    return ApiRequest().get(
       fromJson: WellnessTipModel.fromJson,
       endPoint: ApiEndPoints.wellnessTips,
-      isLoading: isLoadingTips,
+      isLoading: isLoadingWellnessTips,
       isPagination: true,
-      page: currentPage.value,
-      limit: limit,
       showResponse: true,
+      page: tipsCurrentPage.value,
+      limit: limit,
       onSuccess: (result) {
-        if (currentPage.value == 1) wellnessTipsList.clear();
+        if (tipsCurrentPage.value == 1) wellnessTipsList.clear();
         wellnessTipsList.addAll(result.allTips);
-        totalPages.value = (result.meta.total / limit).ceil();
-        hasMore.value = currentPage.value < totalPages.value;
-        currentPage.value++;
+        tipsTotalPages.value = (result.meta.total / limit).ceil();
+        tipsHasMore.value = tipsCurrentPage.value < tipsTotalPages.value;
+
+
+        wellnessLickedTipsList.clear();
+        wellnessLickedTipsList.addAll(result.allTips.where((tip) => tip.isFavourite == true));
+
+
       },
     );
   }
-
 }

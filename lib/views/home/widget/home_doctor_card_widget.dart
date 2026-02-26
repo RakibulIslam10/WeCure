@@ -15,7 +15,7 @@ class HomeDoctorCardWidget extends GetView<HomeController> {
         shrinkWrap: true,
         primary: true,
         scrollDirection: Axis.horizontal,
-        itemCount: 10,
+        itemCount: controller.allDoctorsList.length,
         itemBuilder: (context, index) => DoctorCardWidget(
           imageUrl: controller.allDoctorsList[index].profileImage ?? '',
           rating:

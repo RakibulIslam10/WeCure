@@ -8,22 +8,36 @@ import '../model/wellness_tips_model.dart';
 class HomeController extends GetxController {
   RxInt currentIndex = 0.obs;
 
+  // ── Wellness Tips ──
   RxList<AllTips> wellnessTipsList = <AllTips>[].obs;
-  RxBool isLoadingTips = false.obs;
+  RxBool isLoadingWellnessTips = false.obs;
+  RxInt tipsCurrentPage = 1.obs;
+  RxInt tipsTotalPages = 1.obs;
+  RxBool tipsHasMore = true.obs;
 
-  // Pagination
-  RxInt currentPage = 1.obs;
-  RxInt totalPages = 1.obs;
-  RxBool hasMore = true.obs;
+  // ── Doctors ──
+  RxList<AllDoctors> allDoctorsList = <AllDoctors>[].obs;
+  RxBool isLoadingDoctors = false.obs;
+  RxInt doctorsCurrentPage = 1.obs;
+  RxInt doctorsTotalPages = 1.obs;
+  RxBool doctorsHasMore = true.obs;
+
+  // ── Specialities ──
+  RxList<Specialities> specialitiesList = <Specialities>[].obs;
+  RxBool isLoadingSpecialities = false.obs;
+  RxInt specialitiesCurrentPage = 1.obs;
+  RxInt specialitiesTotalPages = 1.obs;
+  RxBool specialitiesHasMore = true.obs;
+
   final int limit = 10;
+
+  RxBool isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
     loadInitialData();
   }
-
-  RxBool isLoading = false.obs;
 
   Future<void> loadInitialData() async {
     try {
@@ -38,47 +52,37 @@ class HomeController extends GetxController {
     }
   }
 
-  RxBool isLoadingWellnessTips = false.obs;
-
   Future<WellnessTipModel> fetchWellnessTips() async {
     return ApiRequest().get(
       fromJson: WellnessTipModel.fromJson,
       endPoint: ApiEndPoints.wellnessTips,
       isLoading: isLoadingWellnessTips,
       isPagination: true,
-      page: currentPage.value,
+      page: tipsCurrentPage.value,
       limit: limit,
       onSuccess: (result) {
-        if (currentPage.value == 1) wellnessTipsList.clear();
+        if (tipsCurrentPage.value == 1) wellnessTipsList.clear();
         wellnessTipsList.addAll(result.allTips);
-        totalPages.value = (result.meta.total / limit).ceil();
-        hasMore.value = currentPage.value < totalPages.value;
+        tipsTotalPages.value = (result.meta.total / limit).ceil();
+        tipsHasMore.value = tipsCurrentPage.value < tipsTotalPages.value;
       },
     );
   }
-
-  RxList<AllDoctors> allDoctorsList = <AllDoctors>[].obs;
 
   Future<PopularDoctorModel> fetchPopularDoctor() async {
     return ApiRequest().get(
       fromJson: PopularDoctorModel.fromJson,
-      endPoint: ApiEndPoints.wellnessTips,
-      isLoading: isLoading,
+      endPoint: ApiEndPoints.getPopularDoctors,
+      isLoading: isLoadingDoctors,
       isPagination: true,
-      page: currentPage.value,
+      page: doctorsCurrentPage.value,
       limit: limit,
       onSuccess: (result) {
-        if (currentPage.value == 1) allDoctorsList.clear();
+        if (doctorsCurrentPage.value == 1) allDoctorsList.clear();
         allDoctorsList.addAll(result.data);
-        // totalPages.value = (result.meta.total / limit).ceil();
-        hasMore.value = currentPage.value < totalPages.value;
       },
     );
   }
-
-  RxList<Specialities> specialitiesList = <Specialities>[].obs;
-
-  RxBool isLoadingSpecialities = false.obs;
 
   Future<PopularSpecialitesModel> fetchSpecialities() async {
     return ApiRequest().get(
@@ -86,13 +90,13 @@ class HomeController extends GetxController {
       endPoint: ApiEndPoints.getSpecialties,
       isLoading: isLoadingSpecialities,
       isPagination: true,
-      page: currentPage.value,
+      page: specialitiesCurrentPage.value,
       limit: limit,
       onSuccess: (result) {
-        if (currentPage.value == 1) specialitiesList.clear();
+        if (specialitiesCurrentPage.value == 1) specialitiesList.clear();
         specialitiesList.addAll(result.data);
-        totalPages.value = (result.meta.total / limit).ceil();
-        hasMore.value = currentPage.value < totalPages.value;
+        specialitiesTotalPages.value = (result.meta.total / limit).ceil();
+        specialitiesHasMore.value = specialitiesCurrentPage.value < specialitiesTotalPages.value;
       },
     );
   }
