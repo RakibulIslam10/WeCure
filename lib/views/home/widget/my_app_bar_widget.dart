@@ -39,33 +39,47 @@ class MyAppBarWidget extends GetView<HomeController> {
                   ),
                 ),
                 Space.width.v10,
-                Obx(
-                      () => GestureDetector(
+                Obx(() {
+                  final profileController = Get.find<ProfileController>();
+                  final isUser = AppStorage.isUser == 'USER';
+
+                  final isLoading = isUser
+                      ? profileController.getUserProfileLoading.value
+                      : profileController.getDoctorProfileLoading.value;
+
+                  final imageUrl = isUser
+                      ? profileController.userProfileModel?.data.profileImage ??
+                            ''
+                      : profileController
+                                .doctorProfileModel
+                                ?.data
+                                .userId
+                                .profileImage ??
+                            '';
+
+                  return GestureDetector(
                     onTap: () => Get.find<NavigationController>().goToProfile(),
-                    child: Get.find<ProfileController>().getDoctorProfileLoading.value
+                    child: isLoading
                         ? Shimmer.fromColors(
-                      baseColor: Colors.grey.shade300,
-                      highlightColor: Colors.grey.shade100,
-                      child: Container(
-                        width: 50.h,
-                        height: 50.h,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
+                            baseColor: Colors.grey.shade300,
+                            highlightColor: Colors.grey.shade100,
+                            child: Container(
+                              width: 50.h,
+                              height: 50.h,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
                         : ProfileAvatarWidget(
-                      size: 50.h,
-                      imageUrl: Get.find<ProfileController>()
-                          .doctorProfileModel
-                          ?.data
-                          .userId
-                          .profileImage ??
-                          "https://raw.githubusercontent.com/ai-py-auto/souce/refs/heads/main/Rectangle%202.png",
-                    ),
-                  ),
-                ),
+                            size: 50.h,
+                            imageUrl: imageUrl.isNotEmpty
+                                ? imageUrl
+                                : "https://raw.githubusercontent.com/ai-py-auto/souce/refs/heads/main/Rectangle%202.png",
+                          ),
+                  );
+                }),
               ],
             ),
           ],
