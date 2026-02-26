@@ -9,13 +9,19 @@ class ProfileScreenMobile extends GetView<ProfileController> {
       appBar: CommonAppBar(title: "Profile", isBack: false),
       body: SafeArea(
         child: Obx(
-          () => controller.getDoctorProfileLoading.value || controller.getUserProfileLoading.value
+          () =>
+              controller.getDoctorProfileLoading.value ||
+                  controller.getUserProfileLoading.value
               ? LoadingWidget()
               : RefreshIndicator(
                   color: CustomColors.primary,
                   backgroundColor: CustomColors.whiteColor,
                   onRefresh: () async {
-                    controller.getDoctorProfile();
+                    if (AppStorage.isUser == 'DOCTOR') {
+                      controller.getDoctorProfile();
+                    } else {
+                      controller.getUserProfile();
+                    }
                   },
                   child: ListView(
                     physics: BouncingScrollPhysics(),

@@ -41,6 +41,7 @@ class ApiEndPoints {
   // PROFILE
   static const String doctorProfile = '/doctors/me/profile';
   static const String userProfile = '/users/me';
+  static const String userUpdateProfile = '/users/profile';
 
   //  PRODUCT ENDPOINTS
   static const String products = '/products';

@@ -1,4 +1,5 @@
 import 'package:glady/views/profile/controller/profile_controller.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/utils/app_storage.dart';
 import '../../../core/utils/basic_import.dart';
@@ -77,7 +78,7 @@ class ProfileBoxWidget extends GetView<ProfileController> {
                 ),
                 onPressed: () {},
                 child: TextWidget(
-                  'A+',
+                  controller.userProfileModel?.data.bloodGroup ?? '',
                   fontSize: Dimensions.titleSmall * 0.9,
                   color: CustomColors.primary,
                 ),
@@ -85,12 +86,14 @@ class ProfileBoxWidget extends GetView<ProfileController> {
             ],
           ),
           TextWidget(
-            '10- aug- 1986',
+            controller.userProfileModel?.data.dateOfBirth != null
+                ? DateFormat('dd - MMM - yyyy').format(controller.userProfileModel!.data.dateOfBirth!)
+                : '-',
             fontSize: Dimensions.titleSmall,
             color: Colors.black.withOpacity(0.7),
           ),
           TextWidget(
-          ',${controller.userProfileModel?.data.phone ?? ''}',
+          controller.userProfileModel?.data.phone ?? '',
             fontSize: Dimensions.titleSmall,
             color: Colors.black.withOpacity(0.7),
           ),
@@ -104,13 +107,13 @@ class ProfileBoxWidget extends GetView<ProfileController> {
               Space.height.v10,
               Wrap(
                 children: List.generate(
-                  controller.userProfileModel?.data.allergies.length ?? 0,
+                  controller.userProfileModel?.data.allergies?.length ?? 0,
                   (index) => TextWidget(
                     padding: EdgeInsetsGeometry.only(
                       right: Dimensions.widthSize * 2,
                       bottom: Dimensions.heightSize,
                     ),
-                    controller.userProfileModel?.data.allergies[index].toString() ?? '',
+                    controller.userProfileModel!.data.allergies?[index].toString() ?? '',
                     fontSize: Dimensions.titleSmall,
                     color: CustomColors.grayShade,
                   ),

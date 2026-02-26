@@ -38,6 +38,8 @@ class ProfileController extends GetxController {
     super.onInit();
     if (AppStorage.isUser == 'DOCTOR') {
       getDoctorProfile();
+    } else {
+      getUserProfile();
     }
   }
 
@@ -48,7 +50,6 @@ class ProfileController extends GetxController {
   }
 
   RxBool getDoctorProfileLoading = false.obs;
-
   DoctorProfileModel ? doctorProfileModel;
 
   Future<DoctorProfileModel> getDoctorProfile() async {

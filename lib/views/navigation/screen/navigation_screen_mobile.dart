@@ -13,13 +13,14 @@ class NavigationScreenMobile extends GetView<NavigationController> {
         if (controller.selectedIndex.value != 0) {
           controller.selectedIndex.value = 0;
         } else {
-          final shouldExit = await Get.dialog<bool>(
-            _ExitConfirmationDialog(),
-            barrierDismissible: false,
-          );
-          if (shouldExit == true) {
-            SystemNavigator.pop();
-          }
+          // final shouldExit = await Get.dialog<bool>(
+          //   _ExitConfirmationDialog(),
+          //   barrierDismissible: false,
+          // );
+          Get.back(result: true);
+          // if (shouldExit == true) {
+          //   SystemNavigator.pop();
+          // }
         }
       },
       child: Scaffold(

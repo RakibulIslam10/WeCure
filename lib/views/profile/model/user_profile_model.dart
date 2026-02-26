@@ -17,7 +17,6 @@ class UserProfileModel {
     message: json["message"],
     data: UserData.fromJson(json["data"]),
   );
-
 }
 
 class UserData {
@@ -33,13 +32,13 @@ class UserData {
   final String status;
   final DateTime updatedAt;
   final String refreshToken;
-  final DateTime dateOfBirth;
-  final String phone;
+  final DateTime? dateOfBirth;
+  final String? phone;
   final String profileImage;
   final dynamic passwordResetOtp;
   final dynamic passwordResetOtpExpires;
   final String bloodGroup;
-  final List<String> allergies;
+  final List<String>? allergies;
   final String accountName;
   final String accountNumber;
   final String bankName;
@@ -57,41 +56,40 @@ class UserData {
     required this.status,
     required this.updatedAt,
     required this.refreshToken,
-    required this.dateOfBirth,
-    required this.phone,
+    this.dateOfBirth,
+    this.phone,
     required this.profileImage,
     required this.passwordResetOtp,
     required this.passwordResetOtpExpires,
     required this.bloodGroup,
-    required this.allergies,
+    this.allergies,
     required this.accountName,
     required this.accountNumber,
     required this.bankName,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) => UserData(
-    id: json["_id"],
-    email: json["email"],
-    v: json["__v"],
+    id: json["_id"] ?? '',
+    email: json["email"] ?? '',
+    v: json["__v"] ?? 0,
     createdAt: DateTime.parse(json["createdAt"]),
     emailVerificationOtp: json["emailVerificationOtp"],
     emailVerificationOtpExpires: json["emailVerificationOtpExpires"],
-    isEmailVerified: json["isEmailVerified"],
-    name: json["name"],
-    role: json["role"],
-    status: json["status"],
+    isEmailVerified: json["isEmailVerified"] ?? false,
+    name: json["name"] ?? '',
+    role: json["role"] ?? '',
+    status: json["status"] ?? '',
     updatedAt: DateTime.parse(json["updatedAt"]),
-    refreshToken: json["refreshToken"],
-    dateOfBirth: DateTime.parse(json["dateOfBirth"]),
-    phone: json["phone"],
-    profileImage: json["profileImage"],
+    refreshToken: json["refreshToken"] ?? '',
+    dateOfBirth: json["dateOfBirth"] != null ? DateTime.parse(json["dateOfBirth"]) : null,
+    phone: json["phone"] ?? '',
+    profileImage: json["profileImage"] ?? '',
     passwordResetOtp: json["passwordResetOtp"],
     passwordResetOtpExpires: json["passwordResetOtpExpires"],
-    bloodGroup: json["bloodGroup"],
-    allergies: List<String>.from(json["allergies"].map((x) => x)),
-    accountName: json["accountName"],
-    accountNumber: json["accountNumber"],
-    bankName: json["bankName"],
+    bloodGroup: json["bloodGroup"] ?? '',
+    allergies: json["allergies"] != null ? List<String>.from(json["allergies"].map((x) => x)) : [],
+    accountName: json["accountName"] ?? '',
+    accountNumber: json["accountNumber"] ?? '',
+    bankName: json["bankName"] ?? '',
   );
-
 }
