@@ -5,6 +5,9 @@ class AboutDesWidget extends GetView<DoctorDetailsController> {
 
   @override
   Widget build(BuildContext context) {
+    final about = controller.doctorDetailsInfoModel?.data.doctor.about ?? '';
+    if (about.isEmpty) return const SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: crossStart,
       mainAxisSize: mainMin,
@@ -12,8 +15,7 @@ class AboutDesWidget extends GetView<DoctorDetailsController> {
         TextWidget("About"),
         Space.height.v10,
         TextWidget(
-          '''Dr. Elowyn Starcrest is a compassionate and highly skilled physician known for her patient-centered approach and dedication to delivering exceptional care. 
-With a strong commitment to evidence-based medicine, she combines clinical expertise with a warm, thoughtful bedside manner.''',
+          about,
           fontSize: Dimensions.titleSmall,
           color: CustomColors.blackColor.withOpacity(0.7),
           fontWeight: FontWeight.w400,

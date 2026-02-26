@@ -26,7 +26,7 @@ class HomeDoctorCardWidget extends GetView<HomeController> {
           name: controller.allDoctorsList[index].name,
           profession: controller.allDoctorsList[index].specialty,
           onTap: () {
-            Get.toNamed(Routes.doctorDetailsScreen);
+            Get.toNamed(Routes.doctorDetailsScreen, arguments: controller.allDoctorsList[index].id);
           },
           hospital:
               controller.allDoctorsList[index].currentOrganization ??

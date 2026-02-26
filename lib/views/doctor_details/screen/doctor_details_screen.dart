@@ -1,9 +1,13 @@
 import 'package:glady/core/widgets/divider_widget.dart';
+import 'package:glady/core/widgets/loading_widget.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/utils/basic_import.dart';
 import '../../../core/widgets/common_app_bar.dart';
+import '../../../core/widgets/profile_avater_widget.dart';
 import '../../../widgets/doctor_details_card.dart';
 import '../controller/doctor_details_controller.dart';
+import '../model/doctor_details_model.dart';
 import '../widget/booking_dialog.dart';
 import '../widget/ratings_card.dart';
 
