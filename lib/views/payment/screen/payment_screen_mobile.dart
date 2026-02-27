@@ -15,14 +15,7 @@ class PaymentScreenMobile extends GetView<PaymentController> {
       bottomNavigationBar: PrimaryButtonWidget(
         title: 'Make payment',
         onPressed: () {
-          Get.offAll(
-            ConfirmationWidget(
-              iconPath: Assets.icons.vector,
-              title: "payment successful",
-              subtitle:
-              'About this payment information has been sent your email\n Waiting for doctor Confirmation',
-            ),
-          );
+          controller.makePayment();
         },
         padding: EdgeInsets.symmetric(
           horizontal: Dimensions.defaultHorizontalSize,
@@ -37,12 +30,23 @@ class PaymentScreenMobile extends GetView<PaymentController> {
           children: [
             Space.height.v20,
             TextWidget(
-              doctorController.doctorDetailsInfoModel?.data.doctor.userId.name ?? '',
+              doctorController
+                      .doctorDetailsInfoModel
+                      ?.data
+                      .doctor
+                      .userId
+                      .name ??
+                  '',
               fontSize: Dimensions.titleMedium,
               fontWeight: FontWeight.w600,
             ),
             TextWidget(
-              doctorController.doctorDetailsInfoModel?.data.doctor.currentOrganization ?? '',
+              doctorController
+                      .doctorDetailsInfoModel
+                      ?.data
+                      .doctor
+                      .currentOrganization ??
+                  '',
               fontSize: Dimensions.titleSmall,
               color: CustomColors.blackColor.withOpacity(0.5),
             ),
@@ -90,7 +94,7 @@ class PaymentScreenMobile extends GetView<PaymentController> {
                 runSpacing: Dimensions.heightSize,
                 children: List.generate(
                   bookController.selectedAttachments.length,
-                      (index) {
+                  (index) {
                     final file = File(
                       bookController.selectedAttachments[index].path,
                     );

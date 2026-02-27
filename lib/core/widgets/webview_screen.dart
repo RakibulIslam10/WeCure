@@ -1,19 +1,19 @@
 import 'package:webview_flutter/webview_flutter.dart';
+import '../../views/payment/controller/payment_controller.dart';
 import '../utils/basic_import.dart';
+import 'confirmation_widget.dart';
+import 'loading_widget.dart';
 
-class WebViewScreen extends StatefulWidget {
-  final String url;
-  final String title;
-
-  const WebViewScreen({super.key, required this.url, required this.title});
+class WebPaymentScreen extends StatefulWidget {
+  const WebPaymentScreen({super.key});
 
   @override
-  State<WebViewScreen> createState() => _WebViewScreenState();
+  State<WebPaymentScreen> createState() => _WebPaymentScreenState();
 }
-
-class _WebViewScreenState extends State<WebViewScreen> {
+class _WebPaymentScreenState extends State<WebPaymentScreen> {
+  final controller = Get.find<PaymentController>();
   late final WebViewController _webViewController;
-  final RxBool isLoading = true.obs;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -22,39 +22,81 @@ class _WebViewScreenState extends State<WebViewScreen> {
   }
 
   void _initializeWebView() {
+
+    final paymentUrl = controller.paymentUrl;
+
+    if (paymentUrl.isEmpty) {
+      _handleFailure("Payment URL not found");
+      return;
+    }
+
+    debugPrint("🔗 Loading Payment URL: $paymentUrl");
+
     _webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (String url) {
-            isLoading.value = true;
+            setState(() => isLoading = true);
           },
           onPageFinished: (String url) {
-            isLoading.value = false;
+            setState(() => isLoading = false);
+            debugPrint("✅ Current URL: $url");
+
+            // ✅ Success check
+            if (url.contains('success')) {
+              _handleSuccess();
+            }
+            // ✅ Cancel/Failed check
+            else if (url.contains('cancel') || url.contains('failed')) {
+              _handleFailure("Payment failed or was cancelled");
+            }
           },
           onWebResourceError: (WebResourceError error) {
-            debugPrint("WebView error: ${error.description}");
+            debugPrint("❌ WebView Error: ${error.description}");
+            _handleFailure("Failed to load payment page");
           },
         ),
       )
-      ..loadRequest(Uri.parse(widget.url));
+      ..loadRequest(Uri.parse(paymentUrl));
+
+    setState(() => isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(title: widget.title),
-      body: Obx(
-        () => Stack(
-          children: [
-            WebViewWidget(controller: _webViewController),
-            if (isLoading.value)
-              Center(
-                child: CircularProgressIndicator(color: CustomColors.primary),
-              ),
-          ],
-        ),
+      appBar: CommonAppBar(
+        title: 'Payment',
+        isBack: true,
+      ),
+      body: isLoading
+          ? const LoadingWidget()
+          : WebViewWidget(controller: _webViewController),
+    );
+  }
+
+  void _handleSuccess() {
+    debugPrint("✅ Payment Successful");
+
+    controller.paymentUrl = '';
+
+    Get.offAll(
+      ConfirmationWidget(
+        iconPath: Assets.icons.vector,
+        title: "payment successful",
+        subtitle:
+        'About this payment information has been sent your email\n Waiting for doctor Confirmation',
       ),
     );
+  }
+
+  void _handleFailure(String message) {
+    debugPrint("❌ Payment Failed: $message");
+
+    controller.paymentUrl = '';
+
+    Get.back();
+    CustomSnackBar.error(message);
   }
 }
