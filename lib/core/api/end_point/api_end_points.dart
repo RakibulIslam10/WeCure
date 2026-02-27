@@ -58,5 +58,5 @@ class ApiEndPoints {
   static const String getFavorites = '/favorites';
 
   // SEARCH ENDPOINTS
-  static const String search = '/search';
+  static const String searchDoctors = '/doctors/search?q=';
 }
