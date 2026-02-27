@@ -11,7 +11,8 @@ class DoctorDetailsCard extends StatelessWidget {
     required this.yearsOfExperience,
     this.startingPrice,
     this.onTap,
-    this.isPriceShow, this.borderHide,
+    this.isPriceShow,
+    this.borderHide,
   });
 
   final String imageUrl;
@@ -36,7 +37,9 @@ class DoctorDetailsCard extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Dimensions.radius),
-          border: borderHide == true ? null : Border.all(color: CustomColors.grayShade.withOpacity(0.15))
+          border: borderHide == true
+              ? null
+              : Border.all(color: CustomColors.grayShade.withOpacity(0.15)),
         ),
         child: Row(
           crossAxisAlignment: crossStart,
@@ -50,8 +53,8 @@ class DoctorDetailsCard extends StatelessWidget {
                 fit: BoxFit.cover,
                 errorWidget: (context, url, error) => Icon(
                   Icons.image_not_supported,
-                  color: CustomColors.grayShade,
-                  size: Dimensions.iconSizeLarge,
+                  color: Colors.grey.shade400,
+                  size: Dimensions.iconSizeLarge * 2,
                 ),
               ),
             ),

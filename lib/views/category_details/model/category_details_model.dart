@@ -1,18 +1,8 @@
-// To parse this JSON data, do
-//
-//     final categoryDetailsModel = categoryDetailsModelFromJson(jsonString);
-
-import 'dart:convert';
-
-CategoryDetailsModel categoryDetailsModelFromJson(String str) => CategoryDetailsModel.fromJson(json.decode(str));
-
-String categoryDetailsModelToJson(CategoryDetailsModel data) => json.encode(data.toJson());
-
 class CategoryDetailsModel {
   final bool success;
   final int statusCode;
   final String message;
-  final List<Datum> data;
+  final List<Specialists> data;
   final Meta meta;
 
   CategoryDetailsModel({
@@ -27,65 +17,48 @@ class CategoryDetailsModel {
     success: json["success"],
     statusCode: json["statusCode"],
     message: json["message"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    data: List<Specialists>.from(json["data"].map((x) => Specialists.fromJson(x))),
     meta: Meta.fromJson(json["meta"]),
   );
-
-  Map<String, dynamic> toJson() => {
-    "success": success,
-    "statusCode": statusCode,
-    "message": message,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-    "meta": meta.toJson(),
-  };
 }
 
-class Datum {
+class Specialists {
   final String id;
   final String currentOrganization;
+  final String specialty;
   final int experienceYears;
   final int totalReviews;
-  final int minFee;
   final String name;
   final String profileImage;
-  final int totalExperienceYears;
+  final int? totalExperienceYears;
+  final int? minFee;
   final double averageRating;
 
-  Datum({
+  Specialists({
     required this.id,
     required this.currentOrganization,
+    required this.specialty,
     required this.experienceYears,
     required this.totalReviews,
-    required this.minFee,
+     this.minFee,
     required this.name,
     required this.profileImage,
-    required this.totalExperienceYears,
+     this.totalExperienceYears,
     required this.averageRating,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["_id"],
-    currentOrganization: json["currentOrganization"],
-    experienceYears: json["experienceYears"],
-    totalReviews: json["totalReviews"],
-    minFee: json["minFee"],
-    name: json["name"],
-    profileImage: json["profileImage"],
-    totalExperienceYears: json["totalExperienceYears"],
-    averageRating: json["averageRating"]?.toDouble(),
+  factory Specialists.fromJson(Map<String, dynamic> json) => Specialists(
+    id: json["_id"] ?? '',
+    currentOrganization: json["currentOrganization"] ?? '',
+    specialty: json["specialty"] ?? '',
+    experienceYears: json["experienceYears"] ?? 0,
+    totalReviews: json["totalReviews"] ?? 0,
+    minFee: json["minFee"] ?? 0,
+    name: json["name"] ?? '',
+    profileImage: json["profileImage"] ?? '',
+    totalExperienceYears: json["totalExperienceYears"] ?? 0,
+    averageRating: (json["averageRating"] ?? 0).toDouble(),
   );
-
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "currentOrganization": currentOrganization,
-    "experienceYears": experienceYears,
-    "totalReviews": totalReviews,
-    "minFee": minFee,
-    "name": name,
-    "profileImage": profileImage,
-    "totalExperienceYears": totalExperienceYears,
-    "averageRating": averageRating,
-  };
 }
 
 class Meta {
@@ -107,11 +80,4 @@ class Meta {
     limit: json["limit"],
     totalPages: json["totalPages"],
   );
-
-  Map<String, dynamic> toJson() => {
-    "total": total,
-    "page": page,
-    "limit": limit,
-    "totalPages": totalPages,
-  };
 }

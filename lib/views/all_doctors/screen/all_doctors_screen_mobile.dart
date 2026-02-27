@@ -45,8 +45,7 @@ class AllDoctorsScreenMobile extends GetView<AllDoctorsController> {
                   }
 
                   return DoctorCardWidget(
-                    imageUrl:
-                        controller.allDoctorsList[index].profileImage ?? '',
+                    imageUrl: controller.allDoctorsList[index].profileImage ?? '',
                     rating:
                         controller.allDoctorsList[index].averageRating
                             .toStringAsFixed(1) ??

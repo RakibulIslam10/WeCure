@@ -28,6 +28,7 @@ class ApiEndPoints {
   static const String addBankAccount = '/doctors/me/bank-details';
   static const String doctorAppointmentDetails = '/appointments/doctor';
   static const String getPopularDoctors = '/doctors/popular';
+  static const String getAllSpecialDoctor = '/doctors/specialty';
 
 
   static const String addServiceDoctor = '/doctors/me/services';

@@ -8,16 +8,16 @@ class CategorySectionWidget extends GetView<HomeController> {
     return Container(
       margin: EdgeInsets.only(left: Dimensions.defaultHorizontalSize),
       height: 120.h,
-      child: Obx(() => ListView.builder(
+      child: Obx(
+        () => ListView.builder(
           physics: BouncingScrollPhysics(),
-        itemCount: min(controller.specialitiesList.length, 10),
+          itemCount: min(controller.specialitiesList.length, 10),
           addRepaintBoundaries: true,
           cacheExtent: 500,
           shrinkWrap: true,
           primary: true,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-
             if (index == controller.specialitiesList.length) {
               return PaginationLoaderWidget(
                 index: index,
@@ -28,7 +28,13 @@ class CategorySectionWidget extends GetView<HomeController> {
             }
 
             return GestureDetector(
-              onTap: () => Get.toNamed(Routes.categoryDetailsScreen),
+              onTap: () => Get.toNamed(
+                Routes.categoryDetailsScreen,
+                arguments: {
+                  'id' :  controller.specialitiesList[index].id,
+                  'name' :  controller.specialitiesList[index].name,
+                }
+              ),
               child: Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: Dimensions.widthSize * 1.5,

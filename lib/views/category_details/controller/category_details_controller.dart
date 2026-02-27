@@ -1,15 +1,16 @@
+import 'package:glady/core/api/end_point/api_end_points.dart';
+import 'package:glady/core/api/services/api_request.dart';
+
 import '../../../core/utils/basic_import.dart';
+import '../model/category_details_model.dart';
+
 class CategoryDetailsController extends GetxController {
-
-
-
   RxString selectedDate = ''.obs;
   RxString selectedTime = ''.obs;
   RxBool showTimeSlots = false.obs;
 
   RxInt selectedDateIndex = (-1).obs;
   RxInt selectedTimeIndex = (-1).obs;
-
 
   final List<String> datesDayList = [
     'Sun 1 Jan',
@@ -41,7 +42,37 @@ class CategoryDetailsController extends GetxController {
 
 
 
+  RxList<Specialists> specialistsList = <Specialists>[].obs;
 
+  RxInt specialistsCurrentPage = 1.obs;
+  RxInt specialistsTotalPages = 1.obs;
+  RxBool specialistsHasMore = true.obs;
 
+  RxBool isLoading = false.obs;
 
+ late String specialtyId = '';
+ late String nameSpecialty = '';
+
+  @override
+  void onInit() {
+    super.onInit();
+    specialtyId = Get.arguments['id'];
+    nameSpecialty = Get.arguments['name'];
+    fetchAllSpecialists();
+  }
+
+  Future<CategoryDetailsModel> fetchAllSpecialists() async {
+    return ApiRequest().get(
+      fromJson: CategoryDetailsModel.fromJson,
+      endPoint: ApiEndPoints.getAllSpecialDoctor,
+      isLoading: isLoading,
+      id: specialtyId,
+      onSuccess: (result) {
+        if(specialistsCurrentPage.value == 1) specialistsList.clear();
+        specialistsList.addAll(result.data);
+        specialistsTotalPages.value = (result.meta.total / 10).ceil();
+        specialistsHasMore.value = specialistsCurrentPage.value < specialistsTotalPages.value;
+      },
+    );
+  }
 }
