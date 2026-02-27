@@ -14,7 +14,14 @@ class HomeScreenMobile extends GetView<HomeController> {
         child: Obx(
           () => controller.isLoading.value
               ? UserHomeShimmerWidget()
-              : _bodyWidget(),
+              : RefreshIndicator(
+                  color: CustomColors.primary,
+                  backgroundColor: CustomColors.whiteColor,
+                  onRefresh: () async {
+                    controller.loadInitialData();
+                  },
+                  child: _bodyWidget(),
+                ),
         ),
       ),
     );
