@@ -36,6 +36,8 @@ class LoginController extends GetxController {
 
     // emailController.text = 'dr.uno@yopmail.com';
     // passwordController.text = 'securepass';
+
+
   }
 
    Future<LoginModel> loginProcess() async {

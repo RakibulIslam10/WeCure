@@ -72,23 +72,27 @@ class TipsScreenMobile extends GetView<TipsController> {
                               tip.content,
                               fontWeight: FontWeight.w500,
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: CustomColors.disableColor,
-                                shape: BoxShape.circle,
+                            InkWell(
+                              onTap: () => controller.toggleFavorite(tip.id, index),
+
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: CustomColors.disableColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                padding: EdgeInsets.all(
+                                  Dimensions.paddingSize * 0.4,
+                                ),
+                                child: tip.isFavourite == false
+                                    ? Icon(
+                                        Icons.favorite_border,
+                                        color: CustomColors.whiteColor,
+                                      )
+                                    : Icon(
+                                        Icons.favorite,
+                                        color: Colors.redAccent,
+                                      ),
                               ),
-                              padding: EdgeInsets.all(
-                                Dimensions.paddingSize * 0.4,
-                              ),
-                              child: tip.isFavourite == false
-                                  ? Icon(
-                                      Icons.favorite_border,
-                                      color: CustomColors.whiteColor,
-                                    )
-                                  : Icon(
-                                      Icons.favorite,
-                                      color: Colors.redAccent,
-                                    ),
                             ),
                           ],
                         ),

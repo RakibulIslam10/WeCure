@@ -6,7 +6,7 @@ class FindScreenMobile extends GetView<FindController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(title: "Find", isBack: false),
+      appBar: CommonAppBar(title: "Search", isBack: false),
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,

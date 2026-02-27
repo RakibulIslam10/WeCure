@@ -1,5 +1,5 @@
 class ApiEndPoints {
-  static const String baseUrl = 'http://10.10.20.22:3001/api';
+  static const String baseUrl = 'https://bvh0nlc7-3001.inc1.devtunnels.ms/api';
 
   // AUTH ENDPOINTS
   static const String login = '/auth/login';
@@ -17,7 +17,6 @@ class ApiEndPoints {
   static const String doctorUpdateProfile = '/doctors/me/profile';
   static const String changePassword = '/users/change-password';
   static const String deleteAccount = '/user/delete';
-
   static const String getSpecialties = '/specialist';
   static const String createDoctorInfo = '/doctors/me/profile';
   static const String docUpload = '/doctors/me/documents';
