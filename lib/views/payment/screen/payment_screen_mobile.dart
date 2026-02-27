@@ -5,6 +5,12 @@ class PaymentScreenMobile extends GetView<PaymentController> {
 
   @override
   Widget build(BuildContext context) {
+    final doctorController = Get.find<DoctorDetailsController>();
+    final bookController = Get.find<BookInfoController>();
+
+    final selectedTimeData = doctorController.allTimeModel?.data
+        .firstWhereOrNull((e) => e.time == doctorController.selectedTime.value);
+
     return Scaffold(
       bottomNavigationBar: PrimaryButtonWidget(
         title: 'Make payment',
@@ -14,11 +20,10 @@ class PaymentScreenMobile extends GetView<PaymentController> {
               iconPath: Assets.icons.vector,
               title: "payment successful",
               subtitle:
-                  'About this payment information has been sent your email\n Waiting for doctor Confirmation',
+              'About this payment information has been sent your email\n Waiting for doctor Confirmation',
             ),
           );
         },
-
         padding: EdgeInsets.symmetric(
           horizontal: Dimensions.defaultHorizontalSize,
           vertical: Dimensions.verticalSize,
@@ -28,65 +33,86 @@ class PaymentScreenMobile extends GetView<PaymentController> {
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           children: [
             Space.height.v20,
-            TextWidget("Dr. Elowyn Starcrest"),
             TextWidget(
-              "Dentist",
+              doctorController.doctorDetailsInfoModel?.data.doctor.userId.name ?? '',
+              fontSize: Dimensions.titleMedium,
+              fontWeight: FontWeight.w600,
+            ),
+            TextWidget(
+              doctorController.doctorDetailsInfoModel?.data.doctor.currentOrganization ?? '',
               fontSize: Dimensions.titleSmall,
               color: CustomColors.blackColor.withOpacity(0.5),
             ),
 
             Space.height.v20,
             TextWidget(
-              "visit reason ",
+              "Visit Reason",
               fontSize: Dimensions.titleSmall,
               color: CustomColors.blackColor.withOpacity(0.5),
             ),
-            TextWidget("Professional Cleaning"),
-            Space.height.v10,
+            Space.height.v5,
             TextWidget(
-              '''Detail Info the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.''',
-              fontSize: Dimensions.titleSmall,
-              color: CustomColors.blackColor.withOpacity(0.8),
+              bookController.reasonTitleController.text,
+              fontWeight: FontWeight.w600,
             ),
+
+            if (bookController.reasonDetailsController.text.isNotEmpty) ...[
+              Space.height.v10,
+              TextWidget(
+                bookController.reasonDetailsController.text,
+                fontSize: Dimensions.titleSmall,
+                color: CustomColors.blackColor.withOpacity(0.8),
+              ),
+            ],
+
             Space.height.v20,
             AppointmentSectionWidget(
-              days: 'Sunday',
-              time: '4:30 PM - 4:50 PM',
-              price: '\$10',
-              slot: '\$10',
-              duration: '20 Minutes',
+              days: doctorController.selectedDate.value,
+              time: doctorController.selectedTime.value,
+              price: selectedTimeData?.fee != null
+                  ? '\$${selectedTimeData!.fee}'
+                  : '',
+              slot: '',
+              duration: selectedTimeData?.duration != null
+                  ? '${selectedTimeData!.duration} Minutes'
+                  : '',
             ),
-            Space.height.v20,
-            TextWidget("Attachment"),
-            Space.height.v10,
 
-            Wrap(
-              children: List.generate(controller.attachmentList.length, (
-                index,
-              ) {
-                return Container(
-                  margin: EdgeInsets.only(right: Dimensions.widthSize),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: CustomColors.disableColor.withOpacity(0.2),
-                    ),
-                    borderRadius: BorderRadius.circular(Dimensions.radius),
-                  ),
-                  height: 100.h,
-                  width: 100.w,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(Dimensions.radius),
-                    child: CachedNetworkImage(
-                      imageUrl: controller.attachmentList[index],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                );
-              }),
-            ),
+            Space.height.v20,
+            if (bookController.selectedAttachments.isNotEmpty) ...[
+              TextWidget("Attachment"),
+              Space.height.v10,
+              Wrap(
+                spacing: Dimensions.widthSize,
+                runSpacing: Dimensions.heightSize,
+                children: List.generate(
+                  bookController.selectedAttachments.length,
+                      (index) {
+                    final file = File(
+                      bookController.selectedAttachments[index].path,
+                    );
+                    return Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: CustomColors.disableColor.withOpacity(0.2),
+                        ),
+                        borderRadius: BorderRadius.circular(Dimensions.radius),
+                      ),
+                      height: 100.h,
+                      width: 100.w,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(Dimensions.radius),
+                        child: Image.file(file, fit: BoxFit.cover),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Space.height.v20,
+            ],
           ],
         ),
       ),

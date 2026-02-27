@@ -5,6 +5,34 @@ import '../controller/doctor_details_controller.dart';
 class BookingDialog extends GetView<DoctorDetailsController> {
   const BookingDialog({super.key});
 
+  String _monthName(int month) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return months[month - 1];
+  }
+
+  String _formatTime(String time) {
+    final parts = time.split(':');
+    int hour = int.parse(parts[0]);
+    final minute = parts[1];
+    final period = hour >= 12 ? 'PM' : 'AM';
+    if (hour > 12) hour -= 12;
+    if (hour == 0) hour = 12;
+    return '${hour.toString().padLeft(2, '0')}:$minute $period';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -12,8 +40,7 @@ class BookingDialog extends GetView<DoctorDetailsController> {
         borderRadius: BorderRadius.circular(Dimensions.radius * 1.5),
       ),
       child: Container(
-        constraints: const BoxConstraints(maxHeight: 700),
-        child: Column(
+        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.85),        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
@@ -55,66 +82,85 @@ class BookingDialog extends GetView<DoctorDetailsController> {
                   () => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              childAspectRatio: 2.2,
-                              crossAxisSpacing: 12,
-                              mainAxisSpacing: 12,
+                      // Date loading
+                      if (controller.isLoadingDate.value)
+                        Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(
+                              Dimensions.paddingSize * 0.5,
                             ),
-                        itemCount: controller.datesDayList.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              controller.selectedDateIndex.value = index;
-                              controller.selectedDate.value =
-                                  controller.datesDayList[index];
-                              controller.showTimeSlots.value = true;
-                              print(controller.selectedDate.value);
-                            },
-                            borderRadius: BorderRadius.circular(
-                              Dimensions.radius,
+                            child: CircularProgressIndicator(
+                              color: CustomColors.primary,
                             ),
-                            child: Obx(
-                              () => Container(
-                                decoration: BoxDecoration(
-                                  color:
-                                      controller.selectedDateIndex.value ==
-                                          index
-                                      ? CustomColors.primary
-                                      : Color(0xFFF5F5F5),
-                                  borderRadius: BorderRadius.circular(
-                                    Dimensions.radius,
-                                  ),
-                                  border: Border.all(
-                                    color: Colors.transparent,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: Center(
-                                  child: TextWidget(
-                                    controller.datesDayList[index],
-                                    fontSize: Dimensions.titleSmall,
-                                    fontWeight: FontWeight.w400,
+                          ),
+                        )
+                      else
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                childAspectRatio: 2.5,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12,
+                              ),
+                          itemCount: controller.datesDayList.length,
+                          itemBuilder: (context, index) {
+                            final dateItem = controller.datesDayList[index];
+                            final label =
+                                '${dateItem.day.substring(0, 3).toUpperCase()} ${dateItem.date.day} ${_monthName(dateItem.date.month)}';
+                            return InkWell(
+                              onTap: () {
+                                controller.selectedDateIndex.value = index;
+                                controller.selectedDate.value = dateItem.date
+                                    .toIso8601String()
+                                    .split('T')[0];
+                                controller.showTimeSlots.value = true;
+                                controller.fetchAllTimes(
+                                  controller.selectedDate.value,
+                                );
+                              },
+                              borderRadius: BorderRadius.circular(
+                                Dimensions.radius,
+                              ),
+                              child: Obx(
+                                () => Container(
+                                  decoration: BoxDecoration(
                                     color:
                                         controller.selectedDateIndex.value ==
                                             index
-                                        ? Colors.white
-                                        : CustomColors.blackColor,
-                                    textAlign: TextAlign.center,
+                                        ? CustomColors.primary
+                                        : const Color(0xFFF5F5F5),
+                                    borderRadius: BorderRadius.circular(
+                                      Dimensions.radius,
+                                    ),
+                                    border: Border.all(
+                                      color: Colors.transparent,
+                                      width: 2,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: TextWidget(
+                                      label,
+                                      fontSize: Dimensions.labelSmall,
+                                      fontWeight: FontWeight.w500,
+                                      color:
+                                          controller.selectedDateIndex.value ==
+                                              index
+                                          ? Colors.white
+                                          : CustomColors.blackColor,
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                            );
+                          },
+                        ),
 
                       AnimatedSize(
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         child: controller.showTimeSlots.value
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,76 +168,112 @@ class BookingDialog extends GetView<DoctorDetailsController> {
                                 children: [
                                   Space.height.v15,
                                   TextWidget(
-                                    'Select Date',
+                                    'Select Time',
                                     fontSize: Dimensions.titleLarge * 0.8,
                                   ),
                                   Space.height.v10,
-                                  GridView.builder(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 3,
-                                          childAspectRatio: 2.2,
-                                          crossAxisSpacing: 12,
-                                          mainAxisSpacing: 12,
-                                        ),
-                                    itemCount: controller.timeList.length,
-                                    itemBuilder: (context, index) {
-                                      final time = controller.timeList[index];
-
-                                      return InkWell(
-                                        onTap: () {
-                                          controller.selectedTimeIndex.value =
-                                              index;
-                                          controller.selectedTime.value = time;
-                                          print(controller.selectedTime.value);
-                                        },
-                                        borderRadius: BorderRadius.circular(
-                                          Dimensions.radius,
-                                        ),
-                                        child: Obx(
-                                          () => Container(
-                                            decoration: BoxDecoration(
-                                              color:
+                                  Obx(
+                                    () => controller.isLoadingTime.value
+                                        ? Center(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(
+                                                Dimensions.paddingSize * 0.5,
+                                              ),
+                                              child: CircularProgressIndicator(
+                                                color: CustomColors.primary,
+                                              ),
+                                            ),
+                                          )
+                                        : GridView.builder(
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 3,
+                                                  childAspectRatio: 2.2,
+                                                  crossAxisSpacing: 12,
+                                                  mainAxisSpacing: 12,
+                                                ),
+                                            itemCount:
+                                                controller.timeList.length,
+                                            itemBuilder: (context, index) {
+                                              final timeItem =
+                                                  controller.timeList[index];
+                                              return InkWell(
+                                                onTap: () {
+                                                  if (!timeItem.isAvailable)
+                                                    return;
                                                   controller
                                                           .selectedTimeIndex
-                                                          .value ==
-                                                      index
-                                                  ? CustomColors.primary
-                                                  : Color(0xFFF5F5F5),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              border: Border.all(
-                                                color: Colors.transparent,
-                                                width: 2,
-                                              ),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                time,
-                                                style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w500,
-                                                  color:
-                                                      controller
-                                                              .selectedTimeIndex
-                                                              .value ==
-                                                          index
-                                                      ? Colors.white
-                                                      : CustomColors.blackColor,
+                                                          .value =
+                                                      index;
+                                                  controller
+                                                          .selectedTime
+                                                          .value =
+                                                      timeItem.time;
+                                                },
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                      Dimensions.radius,
+                                                    ),
+                                                child: Obx(
+                                                  () => Opacity(
+                                                    opacity:
+                                                        timeItem.isAvailable
+                                                        ? 1.0
+                                                        : 0.4,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            controller
+                                                                    .selectedTimeIndex
+                                                                    .value ==
+                                                                index
+                                                            ? CustomColors
+                                                                  .primary
+                                                            : const Color(
+                                                                0xFFF5F5F5,
+                                                              ),
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              12,
+                                                            ),
+                                                        border: Border.all(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: 2,
+                                                        ),
+                                                      ),
+                                                      child: Center(
+                                                        child: TextWidget(
+                                                          _formatTime(
+                                                            timeItem.time,
+                                                          ),
+                                                          fontSize: Dimensions
+                                                              .labelMedium,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color:
+                                                              controller
+                                                                      .selectedTimeIndex
+                                                                      .value ==
+                                                                  index
+                                                              ? Colors.white
+                                                              : CustomColors
+                                                                    .blackColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
+                                              );
+                                            },
                                           ),
-                                        ),
-                                      );
-                                    },
                                   ),
                                 ],
                               )
-                            : SizedBox.shrink(),
+                            : const SizedBox.shrink(),
                       ),
                     ],
                   ),
@@ -201,15 +283,18 @@ class BookingDialog extends GetView<DoctorDetailsController> {
 
             DividerWidget(),
 
-            PrimaryButtonWidget(
-              padding: EdgeInsets.symmetric(
-                horizontal: Dimensions.defaultHorizontalSize,
-                vertical: Dimensions.verticalSize,
+            Obx(
+              () => PrimaryButtonWidget(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Dimensions.defaultHorizontalSize,
+                  vertical: Dimensions.verticalSize,
+                ),
+                title: 'Continue',
+                disable: controller.selectedTime.value.isEmpty,
+                onPressed: () {
+                  Get.toNamed(Routes.bookInfoScreen);
+                },
               ),
-              title: 'Continue',
-              onPressed: () {
-                Get.toNamed(Routes.bookInfoScreen);
-              },
             ),
           ],
         ),

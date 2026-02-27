@@ -5,22 +5,62 @@ class AttachmentAddWidget extends GetView<BookInfoController> {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: List.generate(controller.attachmentList.length + 1, (index) {
-        if (controller.attachmentList.length == index) {
-          return GestureDetector(
+    return Obx(
+          () => Wrap(
+        spacing: Dimensions.widthSize,
+        runSpacing: Dimensions.heightSize,
+        children: [
+
+          ...List.generate(controller.selectedAttachments.length, (index) {
+            final file = File(controller.selectedAttachments[index].path);
+            return Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: CustomColors.disableColor.withOpacity(0.2),
+                    ),
+                    borderRadius: BorderRadius.circular(Dimensions.radius),
+                  ),
+                  height: 100.h,
+                  width: 100.w,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(Dimensions.radius),
+                    child: Image.file(file, fit: BoxFit.cover),
+                  ),
+                ),
+                // Remove button
+                Positioned(
+                  top: 4,
+                  right: 4,
+                  child: GestureDetector(
+                    onTap: () => controller.removeAttachment(index),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      padding: EdgeInsets.all(3.r),
+                      child: Icon(Icons.close, size: 12.sp, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }),
+
+          // Add button
+          GestureDetector(
             onTap: () {
               BottomImagePicker.show(
                 multiple: true,
-                multipleImagesVariable: (image) {
-                  controller.multipleImages.value = image;
-                  // print('✅ Single: ${image?.path}');
-                  return image;
+                multipleImagesVariable: (images) {
+                  controller.addAttachments(images);
+                  return images;
                 },
               );
             },
             child: Container(
-              margin: EdgeInsets.only(right: Dimensions.widthSize),
               decoration: BoxDecoration(
                 border: Border.all(
                   color: CustomColors.disableColor.withOpacity(0.8),
@@ -32,27 +72,9 @@ class AttachmentAddWidget extends GetView<BookInfoController> {
               width: 100.w,
               child: Icon(Icons.add, size: 50.sp),
             ),
-          );
-        }
-        return Container(
-          margin: EdgeInsets.only(right: Dimensions.widthSize),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: CustomColors.disableColor.withOpacity(0.2),
-            ),
-            borderRadius: BorderRadius.circular(Dimensions.radius),
           ),
-          height: 100.h,
-          width: 100.w,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(Dimensions.radius),
-            child: CachedNetworkImage(
-              imageUrl: controller.attachmentList[index],
-              fit: BoxFit.cover,
-            ),
-          ),
-        );
-      }),
+        ],
+      ),
     );
   }
 }

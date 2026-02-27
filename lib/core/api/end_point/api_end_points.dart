@@ -56,7 +56,10 @@ class ApiEndPoints {
   // FAVORITE ENDPOINTS
   static const String toggleFavorite = '/favorites/toggle';
   static const String getFavorites = '/favorites';
+  static const String appointments = '/appointments';
 
   // SEARCH ENDPOINTS
   static const String searchDoctors = '/doctors/search?q=';
+  static const String availableDates = '/appointments/available-dates';
+  static const String availableSlots = '/appointments/available-slots';
 }

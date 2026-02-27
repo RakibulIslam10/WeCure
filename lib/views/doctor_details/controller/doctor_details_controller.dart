@@ -1,7 +1,11 @@
+import 'package:glady/core/api/end_point/api_end_points.dart';
 import 'package:glady/core/api/services/api_request.dart';
+import 'package:glady/views/doctor_details/model/all_date_model.dart';
 import 'package:glady/views/doctor_details/model/doctor_details_model.dart';
+import 'package:glady/views/doctor_details/model/time_model.dart';
 import '../../../core/utils/basic_import.dart';
 import '../model/rating_model.dart';
+
 
 class DoctorDetailsController extends GetxController {
   String? doctorId = '';
@@ -11,6 +15,7 @@ class DoctorDetailsController extends GetxController {
     super.onInit();
     doctorId = Get.arguments as String;
     getDoctorDetailsInfo(doctorId ?? '');
+    fetchAllDate();
   }
 
   // Rating breakdown
@@ -23,6 +28,7 @@ class DoctorDetailsController extends GetxController {
   ].obs;
 
   int get totalRatings => ratings.fold(0, (sum, r) => sum + r.count);
+
   double getPercentage(int count) =>
       totalRatings > 0 ? count / totalRatings : 0.0;
 
@@ -33,16 +39,8 @@ class DoctorDetailsController extends GetxController {
   RxInt selectedDateIndex = (-1).obs;
   RxInt selectedTimeIndex = (-1).obs;
 
-  final List<String> datesDayList = [
-    'Sun 1 Jan', 'Mon 5 Feb', 'Tue 8 Mar', 'Wed 1 Apr',
-    'Thu 4 May', 'Fri 27 Jun', 'Sat 14 Jul', 'Sun 8 Aug',
-    'Mon 23 Sep', 'Tue 20 Oct', 'Wed 5 Nov', 'Thu 16 Dec',
-  ];
-
-  final List<String> timeList = [
-    '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
-    '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', '06:00 PM',
-  ];
+  RxList<AllDates> datesDayList = <AllDates>[].obs;
+  RxList<AllTimes> timeList = <AllTimes>[].obs;
 
   // API
   RxBool isLoading = false.obs;
@@ -57,5 +55,45 @@ class DoctorDetailsController extends GetxController {
         doctorDetailsInfoModel = result;
       },
     );
+  }
+
+  RxBool isLoadingDate = false.obs;
+  AllDateModel? allDateModel;
+
+  Future<void> fetchAllDate() async {
+    try {
+      await ApiRequest().get(
+        fromJson: AllDateModel.fromJson,
+        endPoint: ApiEndPoints.availableDates,
+        queryParams: {'doctorId': doctorId},
+        isLoading: isLoadingDate,
+        onSuccess: (result) {
+          allDateModel = result;
+          datesDayList.clear();
+          datesDayList.assignAll(result.data);
+        },
+      );
+    } catch (_) {}
+  }
+
+  RxBool isLoadingTime = false.obs;
+  AllTimeModel? allTimeModel;
+
+  Future<void> fetchAllTimes(String date) async {
+    try {
+      timeList.clear();
+      selectedTimeIndex.value = -1;
+      selectedTime.value = '';
+      await ApiRequest().get(
+        fromJson: AllTimeModel.fromJson,
+        endPoint: ApiEndPoints.availableSlots,
+        queryParams: {'doctorId': doctorId, 'date': date},
+        isLoading: isLoadingTime,
+        onSuccess: (result) {
+          allTimeModel = result;
+          timeList.assignAll(result.data);
+        },
+      );
+    } catch (_) {}
   }
 }
