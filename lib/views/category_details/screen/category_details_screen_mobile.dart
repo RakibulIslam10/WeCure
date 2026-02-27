@@ -46,84 +46,84 @@ class CategoryDetailsScreenMobile extends GetView<CategoryDetailsController> {
                     onTap: null,
                     borderHide: true,
                   ),
-                  Container(
-                    height: 140.h,
-                    color: Color(0xffF8F8F8),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Dimensions.defaultHorizontalSize,
-                        vertical: Dimensions.verticalSize * 0.25,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextWidget(
-                                'Choose Date',
-                                fontWeight: FontWeight.w600,
-                              ),
-                              TextWidget(
-                                'View all',
-                                onTap: () {
-                                  Get.dialog(
-                                    CategoryDialog(),
-                                    barrierDismissible: true,
-                                  );
-                                },
-                                color: CustomColors.blackColor.withOpacity(0.7),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ],
-                          ),
-                          Space.height.v10,
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            physics: BouncingScrollPhysics(),
-                            child: Row(
-                              children: List.generate(
-                                5,
-                                (index) => Container(
-                                  margin: EdgeInsets.only(right: 8),
-                                  // spacing between items
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        Dimensions.defaultHorizontalSize * 0.5,
-                                    vertical: Dimensions.verticalSize * 0.4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                      Dimensions.radius,
-                                    ),
-                                    color: CustomColors.primary,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: crossStart,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TextWidget(
-                                        "Sun \n12 Nov",
-                                        color: CustomColors.whiteColor,
-                                        fontSize: Dimensions.titleSmall,
-                                      ),
-                                      Space.height.v5,
-                                      TextWidget(
-                                        "10 Slots",
-                                        color: CustomColors.whiteColor,
-                                        fontSize: Dimensions.titleSmall,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   height: 140.h,
+                  //   color: Color(0xffF8F8F8),
+                  //   child: Padding(
+                  //     padding: EdgeInsets.symmetric(
+                  //       horizontal: Dimensions.defaultHorizontalSize,
+                  //       vertical: Dimensions.verticalSize * 0.25,
+                  //     ),
+                  //     child: Column(
+                  //       mainAxisSize: MainAxisSize.min,
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Row(
+                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //           children: [
+                  //             TextWidget(
+                  //               'Choose Date',
+                  //               fontWeight: FontWeight.w600,
+                  //             ),
+                  //             TextWidget(
+                  //               'View all',
+                  //               onTap: () {
+                  //                 Get.dialog(
+                  //                   CategoryDialog(),
+                  //                   barrierDismissible: true,
+                  //                 );
+                  //               },
+                  //               color: CustomColors.blackColor.withOpacity(0.7),
+                  //               fontWeight: FontWeight.w600,
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         Space.height.v10,
+                  //         SingleChildScrollView(
+                  //           scrollDirection: Axis.horizontal,
+                  //           physics: BouncingScrollPhysics(),
+                  //           child: Row(
+                  //             children: List.generate(
+                  //               5,
+                  //               (index) => Container(
+                  //                 margin: EdgeInsets.only(right: 8),
+                  //                 // spacing between items
+                  //                 padding: EdgeInsets.symmetric(
+                  //                   horizontal:
+                  //                       Dimensions.defaultHorizontalSize * 0.5,
+                  //                   vertical: Dimensions.verticalSize * 0.4,
+                  //                 ),
+                  //                 decoration: BoxDecoration(
+                  //                   borderRadius: BorderRadius.circular(
+                  //                     Dimensions.radius,
+                  //                   ),
+                  //                   color: CustomColors.primary,
+                  //                 ),
+                  //                 child: Column(
+                  //                   crossAxisAlignment: crossStart,
+                  //                   mainAxisSize: MainAxisSize.min,
+                  //                   children: [
+                  //                     TextWidget(
+                  //                       "Sun \n12 Nov",
+                  //                       color: CustomColors.whiteColor,
+                  //                       fontSize: Dimensions.titleSmall,
+                  //                     ),
+                  //                     Space.height.v5,
+                  //                     TextWidget(
+                  //                       "10 Slots",
+                  //                       color: CustomColors.whiteColor,
+                  //                       fontSize: Dimensions.titleSmall,
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

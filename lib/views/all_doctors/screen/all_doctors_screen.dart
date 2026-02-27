@@ -1,5 +1,8 @@
+import 'package:glady/core/widgets/loading_widget.dart';
+
 import '../../../core/utils/basic_import.dart';
 import '../../../core/widgets/common_app_bar.dart';
+import '../../../core/widgets/pagination_loader.dart';
 import '../../../widgets/doctor_card_widget.dart';
 import '../controller/all_doctors_controller.dart';
 

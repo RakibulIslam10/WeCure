@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:glady/core/widgets/loading_widget.dart';
+import 'package:glady/core/widgets/pagination_loader.dart';
 import 'package:glady/core/widgets/profile_avater_widget.dart';
 import 'package:glady/views/navigation/controller/navigation_controller.dart';
 import 'package:glady/views/profile/controller/profile_controller.dart';

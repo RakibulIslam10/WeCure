@@ -9,9 +9,7 @@ class TipsCardWidget extends GetView<HomeController> {
       () => SizedBox(
         height: 140.h,
         child: ListView.builder(
-          itemCount:
-              controller.wellnessTipsList.length +
-              (controller.tipsHasMore.value ? 1 : 0),
+          itemCount: min(controller.wellnessTipsList.length, 10),
           scrollDirection: Axis.horizontal,
           physics: const BouncingScrollPhysics(),
           padding: EdgeInsets.symmetric(
@@ -20,21 +18,16 @@ class TipsCardWidget extends GetView<HomeController> {
 
           itemBuilder: (context, index) {
             if (index == controller.wellnessTipsList.length) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                controller.tipsCurrentPage.value++;
-                controller.fetchWellnessTips();
-              });
-              return Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.paddingSize * 0.5,
-                  ),
-                  child: CircularProgressIndicator(color: CustomColors.primary),
-                ),
+              return PaginationLoaderWidget(
+                index: index,
+                list: controller.wellnessTipsList,
+                currentPage: controller.tipsCurrentPage,
+                fetchFunction: controller.fetchWellnessTips,
+                padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
               );
             }
-            final tip = controller.wellnessTipsList[index];
 
+            final tip = controller.wellnessTipsList[index];
             return Container(
               width: MediaQuery.of(context).size.width * 0.8,
               margin: EdgeInsets.only(right: Dimensions.widthSize),

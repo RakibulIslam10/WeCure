@@ -47,21 +47,25 @@ class HomeScreenMobile extends GetView<HomeController> {
           SliverToBoxAdapter(child: TipsCardWidget()),
         ],
 
-        SliverToBoxAdapter(
-          child: SectionHeader(
-            title: "Popular Specialties",
-            onViewAllTap: () => Get.toNamed(Routes.allCategoryScreen),
+        if (controller.specialitiesList.isNotEmpty) ...[
+          SliverToBoxAdapter(
+            child: SectionHeader(
+              title: "Popular Specialties",
+              onViewAllTap: () => Get.toNamed(Routes.allCategoryScreen),
+            ),
           ),
-        ),
-        const SliverToBoxAdapter(child: CategorySectionWidget()),
+          const SliverToBoxAdapter(child: CategorySectionWidget()),
+        ],
 
-        SliverToBoxAdapter(
-          child: SectionHeader(
-            title: "Popular Doctor",
-            onViewAllTap: () => Get.toNamed(Routes.allDoctorsScreen),
+        if (controller.allDoctorsList.isNotEmpty) ...[
+          SliverToBoxAdapter(
+            child: SectionHeader(
+              title: "Popular Doctor",
+              onViewAllTap: () => Get.toNamed(Routes.allDoctorsScreen),
+            ),
           ),
-        ),
-        const SliverToBoxAdapter(child: HomeDoctorCardWidget()),
+          const SliverToBoxAdapter(child: HomeDoctorCardWidget()),
+        ],
 
         const SliverToBoxAdapter(child: BottomBannerWidget()),
       ],

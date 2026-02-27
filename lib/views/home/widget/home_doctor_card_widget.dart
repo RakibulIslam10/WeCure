@@ -15,7 +15,7 @@ class HomeDoctorCardWidget extends GetView<HomeController> {
         shrinkWrap: true,
         primary: true,
         scrollDirection: Axis.horizontal,
-        itemCount: controller.allDoctorsList.length,
+        itemCount: min(controller.allDoctorsList.length, 10),
         itemBuilder: (context, index) => DoctorCardWidget(
           imageUrl: controller.allDoctorsList[index].profileImage ?? '',
           rating:
@@ -26,7 +26,10 @@ class HomeDoctorCardWidget extends GetView<HomeController> {
           name: controller.allDoctorsList[index].name,
           profession: controller.allDoctorsList[index].specialty,
           onTap: () {
-            Get.toNamed(Routes.doctorDetailsScreen, arguments: controller.allDoctorsList[index].id);
+            Get.toNamed(
+              Routes.doctorDetailsScreen,
+              arguments: controller.allDoctorsList[index].id,
+            );
           },
           hospital:
               controller.allDoctorsList[index].currentOrganization ??

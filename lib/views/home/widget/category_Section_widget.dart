@@ -10,24 +10,20 @@ class CategorySectionWidget extends GetView<HomeController> {
       height: 120.h,
       child: Obx(() => ListView.builder(
           physics: BouncingScrollPhysics(),
-          itemCount:
-              controller.specialitiesList.length + (controller.specialitiesHasMore.value ? 1 : 0),
+        itemCount: min(controller.specialitiesList.length, 10),
           addRepaintBoundaries: true,
           cacheExtent: 500,
           shrinkWrap: true,
           primary: true,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
+
             if (index == controller.specialitiesList.length) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                controller.specialitiesCurrentPage.value++;
-                controller.fetchSpecialities();
-              });
-              return Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal:  Dimensions.paddingSize * 0.5),
-                  child: CircularProgressIndicator(color: CustomColors.primary),
-                ),
+              return PaginationLoaderWidget(
+                index: index,
+                list: controller.specialitiesList,
+                currentPage: controller.specialitiesCurrentPage,
+                fetchFunction: controller.fetchSpecialities,
               );
             }
 
