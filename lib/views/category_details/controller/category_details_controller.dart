@@ -39,9 +39,6 @@ class CategoryDetailsController extends GetxController {
     '06:00 PM',
   ];
 
-
-
-
   RxList<Specialists> specialistsList = <Specialists>[].obs;
 
   RxInt specialistsCurrentPage = 1.obs;
@@ -50,8 +47,8 @@ class CategoryDetailsController extends GetxController {
 
   RxBool isLoading = false.obs;
 
- late String specialtyId = '';
- late String nameSpecialty = '';
+  late String specialtyId = '';
+  late String nameSpecialty = '';
 
   @override
   void onInit() {
@@ -68,10 +65,11 @@ class CategoryDetailsController extends GetxController {
       isLoading: isLoading,
       id: specialtyId,
       onSuccess: (result) {
-        if(specialistsCurrentPage.value == 1) specialistsList.clear();
+        if (specialistsCurrentPage.value == 1) specialistsList.clear();
         specialistsList.addAll(result.data);
         specialistsTotalPages.value = (result.meta.total / 10).ceil();
-        specialistsHasMore.value = specialistsCurrentPage.value < specialistsTotalPages.value;
+        specialistsHasMore.value =
+            specialistsCurrentPage.value < specialistsTotalPages.value;
       },
     );
   }
