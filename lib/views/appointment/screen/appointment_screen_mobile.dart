@@ -8,73 +8,98 @@ class AppointmentScreenMobile extends GetView<AppointmentController> {
     return Scaffold(
       appBar: CommonAppBar(title: "Appointment", isBack: false),
       body: SafeArea(
-        child: AppStorage.isUser != 'USER' ?  ListView.builder(
-          itemCount: 5,
-          addRepaintBoundaries: true,
-          cacheExtent: 500,
-          padding: EdgeInsets.symmetric(
-            horizontal: Dimensions.defaultHorizontalSize,
-            vertical: Dimensions.verticalSize * 0.5,
-          ),
-          shrinkWrap: true,
-          primary: false,
-          physics: BouncingScrollPhysics(),
-          itemBuilder: (context, index) => Padding(
-            padding: EdgeInsets.only(bottom: Dimensions.heightSize),
-            child: RequestCard(
-              name: "Luna Kellan",
-              service: "Professional cleaning",
-              time: "10:30 PM - 11:00 PM",
-              status: "23 November",
-              buttonTitle: 'Join',
-              onTap: () => Get.toNamed(Routes.videoCallScreen),
-
-              cardOnTap: () {
-                Get.toNamed(Routes.appointmentDetailsScreen);
-              },
-            ),
-          ),
-        ) :
-
-
-        ListView.builder(
-          padding: EdgeInsets.symmetric(
-            horizontal: Dimensions.defaultHorizontalSize,
-            vertical: Dimensions.verticalSize,
-          ),
-          itemCount: controller.statusList.length,
-          addRepaintBoundaries: true,
-          cacheExtent: 500,
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (context, index) {
-            final status = controller.statusList[index];
-            return AppointmentCard(
-              doctorName: 'Dr. Elowyn Starcrest',
-              specialization: 'Dentist',
-              time: '10:30 PM - 11:00 PM',
-              onPressed: () {
-                if (status == 'cancelled') {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) => BottomSheetDialogWidget(
-                      title: 'Delete',
-                      subTitle:
-                          'are you sure you want to delete this appointment',
-                      isLoading: false.obs,
-                      action: () {},
-                    ),
-                  );
-                }
-                if (status == 'ongoing') {
-                  Get.toNamed(Routes.videoCallScreen);
-                }
-                if (status == 'completed') {
-                  Get.toNamed(Routes.inboxScreen);
-                }
-              },
-              status: status,
-            );
+        child: RefreshIndicator(
+          color: CustomColors.primary,
+          backgroundColor: CustomColors.whiteColor,
+          onRefresh: () async {
+            if (AppStorage.isUser == 'USER') controller.fetchUserAppointments();
           },
+          child: Obx(() {
+            if (AppStorage.isUser != 'USER') {
+              return ListView.builder(
+                itemCount: 5,
+                padding: EdgeInsets.symmetric(
+                  horizontal: Dimensions.defaultHorizontalSize,
+                  vertical: Dimensions.verticalSize * 0.5,
+                ),
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, index) => Padding(
+                  padding: EdgeInsets.only(bottom: Dimensions.heightSize),
+                  child: RequestCard(
+                    name: "Luna Kellan",
+                    service: "Professional cleaning",
+                    time: "10:30 PM - 11:00 PM",
+                    status: "23 November",
+                    buttonTitle: 'Join',
+                    onTap: () => Get.toNamed(Routes.videoCallScreen),
+                    cardOnTap: () {
+                      Get.toNamed(Routes.appointmentDetailsScreen);
+                    },
+                  ),
+                ),
+              );
+            }
+
+            if (controller.isLoading.value) {
+              return LoadingWidget();
+            }
+
+            final appointments = controller.userAppointments.value;
+
+            if (appointments == null || appointments.data.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: mainCenter,
+                  children: [
+                    Icon(
+                      Icons.calendar_today_outlined,
+                      size: 80.h,
+                      color: CustomColors.grayShade,
+                    ),
+                    Space.height.v20,
+                    TextWidget(
+                      'No appointments found',
+                      fontSize: Dimensions.titleMedium,
+                      color: CustomColors.grayShade,
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return ListView.builder(
+              padding: EdgeInsets.symmetric(
+                horizontal: Dimensions.defaultHorizontalSize,
+                vertical: Dimensions.verticalSize,
+              ),
+              itemCount: appointments.data.length,
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                final appointment = appointments.data[index];
+
+                final startTime = DateFormat(
+                  'HH:mm',
+                ).parse(appointment.appointmentTime);
+                final endTime = DateFormat(
+                  'HH:mm',
+                ).parse(appointment.appointmentEndTime);
+
+                return AppointmentCard(
+                  appointmentId: appointment.id,
+                  doctorName: appointment.doctorName,
+                  specialization: appointment.specialtyName,
+                  time:
+                      '${DateFormat('HH:mm').format(startTime)} - ${DateFormat('HH:mm').format(endTime)}',
+                  date: DateFormat(
+                    'dd MMM yyyy',
+                  ).format(appointment.appointmentDate.toLocal()),
+                  status: appointment.status.toLowerCase(),
+                  onPressed: () =>
+                      controller.handleAppointmentAction(appointment),
+                );
+              },
+            );
+          }),
         ),
       ),
     );

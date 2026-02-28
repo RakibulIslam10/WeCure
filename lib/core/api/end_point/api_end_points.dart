@@ -27,6 +27,8 @@ class ApiEndPoints {
   static const String doctorHome = '/appointments/doctor/dashboard';
   static const String addBankAccount = '/doctors/me/bank-details';
   static const String doctorAppointmentDetails = '/appointments/doctor';
+  static const String userAppointmentDetails = '/appointments/me';
+  static const String appointments = '/appointments/me';
   static const String getPopularDoctors = '/doctors/popular';
   static const String getAllSpecialDoctor = '/doctors/specialty';
 
@@ -56,7 +58,6 @@ class ApiEndPoints {
   // FAVORITE ENDPOINTS
   static const String toggleFavorite = '/favorites/toggle';
   static const String getFavorites = '/favorites';
-  static const String appointments = '/appointments';
 
   // SEARCH ENDPOINTS
   static const String searchDoctors = '/doctors/search?q=';
