@@ -6,7 +6,7 @@ class PolicyScreenMobile extends GetView<PolicyController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(title: "Policy"),
+      appBar: CommonAppBar(title: "Privacy Policy"),
       body: SafeArea(
         child: Obx(
               () => controller.isLoading.value

@@ -10,6 +10,7 @@ class SupportController extends GetxController {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final messageController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   Rx<XFile?> attachment = Rx<XFile?>(null);
   RxBool isLoading = false.obs;

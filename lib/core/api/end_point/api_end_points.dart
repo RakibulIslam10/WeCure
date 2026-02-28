@@ -25,10 +25,12 @@ class ApiEndPoints {
   static const String policy = '/legal-content/privacy-policy';
   static const String support = '/contact';
   static const String doctorHome = '/appointments/doctor/dashboard';
-  static const String addBankAccount = '/doctors/me/bank-details';
+  static const String addDoctorBankAccount = '/doctors/me/bank-details';
+  static const String addUserBankAccount = '/users/me/bank-details';
   static const String doctorAppointmentDetails = '/appointments/doctor';
   static const String userAppointmentDetails = '/appointments/me';
   static const String appointments = '/appointments/me';
+  static const String appointmentsBook = '/appointments/me';
   static const String doctorAppointments = '/appointments/doctor/me';
   static const String getPopularDoctors = '/doctors/popular';
   static const String getAllSpecialDoctor = '/doctors/specialty';

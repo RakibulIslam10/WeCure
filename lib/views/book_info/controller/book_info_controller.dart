@@ -77,7 +77,7 @@ class BookInfoController extends GetxController {
 
     try {
       await ApiRequest().multiMultipartRequest(
-        endPoint: ApiEndPoints.appointments,
+        endPoint: '/appointments',
         isLoading: isLoading,
         reqType: 'POST',
         body: body,
