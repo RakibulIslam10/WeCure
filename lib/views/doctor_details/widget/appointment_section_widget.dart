@@ -22,10 +22,13 @@ class AppointmentSectionWidget extends StatelessWidget {
       mainAxisAlignment: mainSpaceBet,
       crossAxisAlignment: crossStart,
       children: [
-        Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
+        Row(
+          crossAxisAlignment: crossStart,
           children: [
-            const Icon(Icons.circle_outlined, color: Color(0xff006C93)),
+            Padding(
+              padding: EdgeInsets.only(top: 2.h),
+              child: const Icon(Icons.circle_outlined, color: Color(0xff006C93)),
+            ),
             Space.width.v10,
             Column(
               crossAxisAlignment: crossStart,
@@ -36,20 +39,27 @@ class AppointmentSectionWidget extends StatelessWidget {
                   fontSize: Dimensions.titleSmall,
                   fontWeight: FontWeight.w400,
                 ),
-                TextWidget(
-                  price,
-                  fontSize: Dimensions.titleSmall,
-                  fontWeight: FontWeight.w400,
-                ),
               ],
             ),
           ],
         ),
         Column(
+          crossAxisAlignment: crossEnd,
           children: [
-            TextWidget(slot, fontSize: Dimensions.titleSmall),
+            Row(
+              crossAxisAlignment: crossCenter,
+              children: [
+                TextWidget(slot, fontSize: Dimensions.titleSmall),
+                Space.width.v5,
+                TextWidget(
+                  duration,
+                  fontSize: Dimensions.titleSmall,
+                  fontWeight: FontWeight.w400,
+                ),
+              ],
+            ),
             TextWidget(
-              duration,
+              price,
               fontSize: Dimensions.titleSmall,
               fontWeight: FontWeight.w400,
             ),

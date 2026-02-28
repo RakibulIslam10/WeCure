@@ -17,7 +17,6 @@ class DoctorAppointmentDetailsModel {
     message: json["message"],
     data: Data.fromJson(json["data"]),
   );
-
 }
 
 class Data {
@@ -114,8 +113,4 @@ class Patient {
     bloodGroup: json["bloodGroup"],
     allergies: List<String>.from(json["allergies"].map((x) => x)),
   );
-
-
-
-
 }

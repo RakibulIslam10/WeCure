@@ -89,7 +89,6 @@ class DoctorHomeScreenMobile extends GetView<DoctorHomeController> {
                         ),
                       ),
                       Space.height.v20,
-
                       // ListView.builder(
                       //   itemCount:
                       //       controller

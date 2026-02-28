@@ -15,6 +15,7 @@ class _WebPaymentScreenState extends State<WebPaymentScreen> {
   final controller = Get.find<PaymentController>();
   late final WebViewController _webViewController;
   bool isLoading = true;
+  bool _successHandled = false;
 
   @override
   void initState() {
@@ -34,6 +35,16 @@ class _WebPaymentScreenState extends State<WebPaymentScreen> {
 
     _webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..addJavaScriptChannel(
+        'PaystackCallback',
+        onMessageReceived: (JavaScriptMessage message) {
+          debugPrint("📩 Paystack JS Message: ${message.message}");
+          if (message.message.contains('charge.success') ||
+              message.message.contains('success')) {
+            _handleSuccess();
+          }
+        },
+      )
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (String url) {
@@ -42,6 +53,17 @@ class _WebPaymentScreenState extends State<WebPaymentScreen> {
           onPageFinished: (String url) {
             setState(() => isLoading = false);
             debugPrint("✅ Current URL: $url");
+
+            // ✅ Paystack event inject
+            _webViewController.runJavaScript('''
+              window.addEventListener('message', function(event) {
+                if (event.data && typeof event.data === 'object') {
+                  PaystackCallback.postMessage(JSON.stringify(event.data));
+                } else if (typeof event.data === 'string') {
+                  PaystackCallback.postMessage(event.data);
+                }
+              });
+            ''');
 
             final uri = Uri.parse(url);
 
@@ -68,7 +90,7 @@ class _WebPaymentScreenState extends State<WebPaymentScreen> {
               return;
             }
 
-            // ✅ Paystack / Stripe cancel
+            // ✅ Cancel
             if (url.contains('cancel') || url.contains('close')) {
               _handleFailure("Payment was cancelled");
               return;
@@ -76,7 +98,6 @@ class _WebPaymentScreenState extends State<WebPaymentScreen> {
           },
           onWebResourceError: (WebResourceError error) {
             debugPrint("❌ WebView Error: ${error.description}");
-            _handleFailure("Failed to load payment page");
           },
         ),
       )
@@ -86,7 +107,8 @@ class _WebPaymentScreenState extends State<WebPaymentScreen> {
   }
 
   void _handleSuccess() {
-    if (!mounted) return;
+    if (!mounted || _successHandled) return;
+    _successHandled = true;
     controller.paymentUrl = '';
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Get.offAll(

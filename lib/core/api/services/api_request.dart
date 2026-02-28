@@ -32,9 +32,8 @@ class ApiRequest {
           errorMessage.contains('invalid') ||
           errorMessage.contains('unauthorized')) {
         AppStorage.clear();
-
         Get.offAllNamed(Routes.loginScreen);
-        CustomSnackBar.error('Session expired. Please login again.');
+        // CustomSnackBar.error('Session expired. Please login again.');
       }
     }
   }
@@ -87,8 +86,7 @@ class ApiRequest {
         final Map<String, dynamic> json = jsonDecode(response.body);
         final result = fromJson(json);
 
-        final successMessage =
-            json['message'] ?? Strings.requestCompletedSuccessfully;
+        final successMessage = json['message'] ?? Strings.requestCompletedSuccessfully;
         if (showSuccessSnackBar) CustomSnackBar.success(title: Strings.success,message: successMessage);
         if (onSuccess != null) onSuccess(result);
         return result;

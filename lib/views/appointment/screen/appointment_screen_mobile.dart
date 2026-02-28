@@ -8,7 +8,7 @@ class AppointmentScreenMobile extends GetView<AppointmentController> {
     return Scaffold(
       appBar: CommonAppBar(title: "Appointment", isBack: false),
       body: SafeArea(
-        child: AppStorage.isUser != 'USER' ?             ListView.builder(
+        child: AppStorage.isUser != 'USER' ?  ListView.builder(
           itemCount: 5,
           addRepaintBoundaries: true,
           cacheExtent: 500,

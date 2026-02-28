@@ -83,6 +83,9 @@ class PaymentScreenMobile extends GetView<PaymentController> {
               duration: selectedTimeData?.duration != null
                   ? '${selectedTimeData!.duration} Minutes'
                   : '',
+
+
+
             ),
 
             Space.height.v20,

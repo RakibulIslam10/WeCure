@@ -4,10 +4,5 @@ class AppointmentController extends GetxController {
   List<String> statusList = [
     'ongoing',
     'completed',
-    'cancelled',
-    'ongoing',
-
-    'completed',
-    'cancelled',
   ];
 }
