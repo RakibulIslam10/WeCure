@@ -8,6 +8,8 @@ class AppointmentDetailsScreenMobile
   Widget build(BuildContext context) {
     final appointmentData = controller.userAppointmentDetailsModel.value;
     final status = appointmentData?.data.status;
+    final doctorAppointmentData =
+        controller.doctorAppointmentDetailsModel.value;
     return Scaffold(
       bottomNavigationBar: Obx(
         () => controller.isLoading.value
@@ -24,69 +26,92 @@ class AppointmentDetailsScreenMobile
                       Row(
                         children: [
                           if (AppStorage.isUser != 'USER') ...[
-                            Expanded(
-                              child: PrimaryButtonWidget(
-                                outlineButton: true,
-                                buttonTextColor: CustomColors.rejected,
-                                borderColor: CustomColors.rejected,
-                                borderWidth: 1.5,
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) => BottomSheetDialogWidget(
-                                      titleColor: CustomColors.rejected,
-                                      isInputField: true,
-                                      title: 'Reject Request',
-                                      inputController:
-                                          controller.reasonController,
-                                      subTitle:
-                                          'write a reason for rejecting the appointment request',
-                                      isLoading: controller.isDeleting,
-                                      buttonTex: 'Reject',
-                                      action: () {
-                                        controller.rejectAppointment();
-                                      },
-                                    ),
-                                  );
-                                },
-                                title: 'Reject Appointment',
+                            if (controller
+                                    .doctorAppointmentDetailsModel
+                                    .value
+                                    ?.data
+                                    .status !=
+                                'CANCELLED')
+                              Expanded(
+                                child: PrimaryButtonWidget(
+                                  outlineButton: true,
+                                  buttonTextColor: CustomColors.rejected,
+                                  borderColor: CustomColors.rejected,
+                                  borderWidth: 1.5,
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) => BottomSheetDialogWidget(
+                                        titleColor: CustomColors.rejected,
+                                        isInputField: true,
+                                        title: 'Reject Request',
+                                        inputController:
+                                            controller.reasonController,
+                                        subTitle:
+                                            'write a reason for rejecting the appointment request',
+                                        isLoading: controller.isDeleting,
+                                        buttonTex: 'Reject',
+                                        action: () {
+                                          controller.rejectAppointment();
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  title: 'Reject Appointment',
+                                ),
                               ),
-                            ),
                             Space.width.v10,
                           ],
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: status == 'CANCELLED'
-                                  ? () {}
-                                  : status == 'UPCOMING'
-                                  ? () => Get.toNamed(Routes.videoCallScreen)
-                                  : () => Get.toNamed(Routes.inboxScreen),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      Dimensions.defaultHorizontalSize * 0.5,
-                                  vertical: Dimensions.verticalSize * 0.55,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: CustomColors.primary,
-                                  borderRadius: BorderRadius.circular(
-                                    Dimensions.radius,
+                          Builder(
+                            builder: (_) {
+                              final currentStatus = AppStorage.isUser == 'USER'
+                                  ? controller
+                                        .userAppointmentDetailsModel
+                                        .value
+                                        ?.data
+                                        .status
+                                  : controller
+                                        .doctorAppointmentDetailsModel
+                                        .value
+                                        ?.data
+                                        .status;
+
+                              return Expanded(
+                                child: GestureDetector(
+                                  onTap: currentStatus == 'CANCELLED'
+                                      ? () {}
+                                      : currentStatus == 'ONGOING'
+                                      ? () => Get.toNamed(Routes.videoCallScreen)
+                                      : () => Get.toNamed(Routes.inboxScreen),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal:
+                                          Dimensions.defaultHorizontalSize *
+                                          0.5,
+                                      vertical: Dimensions.verticalSize * 0.55,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: currentStatus == 'CANCELLED'
+                                          ? CustomColors.rejected
+                                          : CustomColors.primary,
+                                      borderRadius: BorderRadius.circular(
+                                        Dimensions.radius,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: TextWidget(
+                                        currentStatus == 'CANCELLED'
+                                            ? 'Cancelled'
+                                            : currentStatus == 'ONGOING' ? 'Join' : 'Chat',
+                                        color: CustomColors.whiteColor,
+                                        fontSize: Dimensions.titleMedium,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                child: Center(
-                                  child: TextWidget(
-                                    status == 'CANCELLED'
-                                        ? "Cancelled"
-                                        : status == 'UPCOMING'
-                                        ? 'Join'
-                                        : 'Chat',
-                                    color: CustomColors.whiteColor,
-                                    fontSize: Dimensions.titleMedium,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -102,7 +127,8 @@ class AppointmentDetailsScreenMobile
             return LoadingWidget();
           }
           if (AppStorage.isUser == 'USER') {
-            final appointmentData = controller.userAppointmentDetailsModel.value;
+            final appointmentData =
+                controller.userAppointmentDetailsModel.value;
             if (appointmentData == null) {
               return Center(
                 child: TextWidget(
@@ -231,8 +257,6 @@ class AppointmentDetailsScreenMobile
               ],
             );
           } else {
-
-
             final appointmentData =
                 controller.doctorAppointmentDetailsModel.value;
             if (appointmentData == null) {

@@ -39,7 +39,7 @@ class RequestViewScreenMobile extends GetView<DoctorHomeController> {
                   service: appointment.reasonTitle,
                   time: appointment.timeRange,
                   status: DateFormat(
-                    "dd MMMM",
+                    "dd MMMM yyyy",
                   ).format(DateTime.parse(appointment.date)),
                   buttonTitle: 'View',
                   cardOnTap: () {

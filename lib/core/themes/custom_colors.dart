@@ -23,6 +23,8 @@ class CustomColors {
 
   // Status Color
   static Color rejected = Color(0xffDC3A3A);
+  static Color pending = const Color(0xFFEAD24B);
+  static Color active = const Color(0xFF726EF5);
   static Color success = const Color(0xFF17C200);
 }
 

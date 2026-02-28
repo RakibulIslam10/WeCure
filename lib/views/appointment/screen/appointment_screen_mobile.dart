@@ -5,6 +5,8 @@ class AppointmentScreenMobile extends GetView<AppointmentController> {
 
   @override
   Widget build(BuildContext context) {
+    final isUser = AppStorage.isUser == 'USER';
+
     return Scaffold(
       appBar: CommonAppBar(title: "Appointment", isBack: false),
       body: SafeArea(
@@ -12,59 +14,68 @@ class AppointmentScreenMobile extends GetView<AppointmentController> {
           color: CustomColors.primary,
           backgroundColor: CustomColors.whiteColor,
           onRefresh: () async {
-            if (AppStorage.isUser == 'USER') controller.fetchUserAppointments();
+            if (isUser) {
+              await controller.fetchUserAppointments();
+            } else {
+              await controller.fetchDoctorAppointments();
+            }
           },
           child: Obx(() {
-            if (AppStorage.isUser != 'USER') {
+
+            /// ================= USER =================
+            if (isUser) {
+
+              if (controller.isUserLoading.value) {
+                return LoadingWidget();
+              }
+              final appointments = controller.userAppointments.value?.data ?? [];
+              if (appointments.isEmpty) {
+                return _emptyWidget();
+              }
+
               return ListView.builder(
-                itemCount: 5,
                 padding: EdgeInsets.symmetric(
                   horizontal: Dimensions.defaultHorizontalSize,
-                  vertical: Dimensions.verticalSize * 0.5,
+                  vertical: Dimensions.verticalSize,
                 ),
-                physics: BouncingScrollPhysics(),
-                itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.only(bottom: Dimensions.heightSize),
-                  child: RequestCard(
-                    name: "Luna Kellan",
-                    service: "Professional cleaning",
-                    time: "10:30 PM - 11:00 PM",
-                    status: "23 November",
-                    buttonTitle: 'Join',
-                    onTap: () => Get.toNamed(Routes.videoCallScreen),
-                    cardOnTap: () {
-                      Get.toNamed(Routes.appointmentDetailsScreen);
-                    },
-                  ),
-                ),
+                physics: const BouncingScrollPhysics(),
+                itemCount: appointments.length,
+                itemBuilder: (context, index) {
+
+                  final appointment = appointments[index];
+
+                  final startTime = DateFormat('HH:mm')
+                      .parse(appointment.appointmentTime ?? '00:00');
+
+                  final endTime = DateFormat('HH:mm')
+                      .parse(appointment.appointmentEndTime ?? '00:00');
+
+                  return AppointmentCard(
+                    appointmentId: appointment.id,
+                    doctorName: appointment.doctorName,
+                    specialization: appointment.specialtyName,
+                    time:
+                    '${DateFormat('HH:mm').format(startTime)} - ${DateFormat('HH:mm').format(endTime)}',
+                    date: DateFormat('dd MMM yyyy')
+                        .format(appointment.appointmentDate.toLocal()),
+                    status: appointment.status.toLowerCase() ?? '',
+                    onPressed: () =>
+                        controller.handleAppointmentAction(appointment),
+                  );
+                },
               );
             }
 
-            if (controller.isLoading.value) {
+            /// ================= DOCTOR =================
+            if (controller.isDoctorLoading.value) {
               return LoadingWidget();
             }
 
-            final appointments = controller.userAppointments.value;
+            final appointments =
+                controller.doctorAppointments.value?.data ?? [];
 
-            if (appointments == null || appointments.data.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: mainCenter,
-                  children: [
-                    Icon(
-                      Icons.calendar_today_outlined,
-                      size: 80.h,
-                      color: CustomColors.grayShade,
-                    ),
-                    Space.height.v20,
-                    TextWidget(
-                      'No appointments found',
-                      fontSize: Dimensions.titleMedium,
-                      color: CustomColors.grayShade,
-                    ),
-                  ],
-                ),
-              );
+            if (appointments.isEmpty) {
+              return _emptyWidget();
             }
 
             return ListView.builder(
@@ -72,35 +83,71 @@ class AppointmentScreenMobile extends GetView<AppointmentController> {
                 horizontal: Dimensions.defaultHorizontalSize,
                 vertical: Dimensions.verticalSize,
               ),
-              itemCount: appointments.data.length,
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
+              itemCount: appointments.length,
               itemBuilder: (context, index) {
-                final appointment = appointments.data[index];
 
-                final startTime = DateFormat(
-                  'HH:mm',
-                ).parse(appointment.appointmentTime);
-                final endTime = DateFormat(
-                  'HH:mm',
-                ).parse(appointment.appointmentEndTime);
+                final appointment = appointments[index];
 
-                return AppointmentCard(
-                  appointmentId: appointment.id,
-                  doctorName: appointment.doctorName,
-                  specialization: appointment.specialtyName,
-                  time:
-                      '${DateFormat('HH:mm').format(startTime)} - ${DateFormat('HH:mm').format(endTime)}',
-                  date: DateFormat(
-                    'dd MMM yyyy',
-                  ).format(appointment.appointmentDate.toLocal()),
-                  status: appointment.status.toLowerCase(),
-                  onPressed: () =>
-                      controller.handleAppointmentAction(appointment),
-                );
+                final startTime = DateFormat('HH:mm')
+                    .parse(appointment.appointmentTime);
+
+                final endTime = DateFormat('HH:mm')
+                    .parse(appointment.appointmentEndTime);
+
+                return
+
+                //   RequestCard(
+                //   name: appointment.patientName,
+                //   service: appointment.specialtyName,
+                //   time: '${DateFormat('HH:mm').format(startTime)} - ${DateFormat('HH:mm').format(endTime)}',
+                //   status: DateFormat('dd MMM yyyy')
+                //       .format(appointment.appointmentDate.toLocal()),
+                //   buttonTitle: appointment.status == 'ONGOING' ? 'Join' : appointment.status == 'CANCELLED' ? 'Cancelled' : 'Chat',
+                //   onTap: () =>
+                //       controller.handleAppointmentAction(appointment),
+                //   cardOnTap: () {
+                //     Get.toNamed(Routes.appointmentDetailsScreen);
+                //   },
+                // );
+
+                  AppointmentCard(
+                    appointmentId: appointment.id,
+                    doctorName: appointment.patientName,
+                    specialization: appointment.specialtyName,
+                    time:
+                    '${DateFormat('HH:mm').format(startTime)} - ${DateFormat('HH:mm').format(endTime)}',
+                    date: DateFormat('dd MMM yyyy')
+                        .format(appointment.appointmentDate.toLocal()),
+                    status: appointment.status.toLowerCase() ?? '',
+                    onPressed: () =>
+                        controller.handleAppointmentAction(appointment),
+                  );
               },
             );
           }),
         ),
+      ),
+    );
+  }
+
+  Widget _emptyWidget() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.calendar_today_outlined,
+            size: 80.h,
+            color: CustomColors.grayShade,
+          ),
+          Space.height.v20,
+          TextWidget(
+            'No appointments found',
+            fontSize: Dimensions.titleMedium,
+            color: CustomColors.grayShade,
+          ),
+        ],
       ),
     );
   }

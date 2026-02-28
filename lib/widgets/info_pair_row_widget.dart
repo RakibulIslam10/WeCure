@@ -48,6 +48,21 @@ class _InfoColumn extends StatelessWidget {
     required this.alignment,
   });
 
+  Color _getValueColor() {
+    switch (value.toUpperCase()) {
+      case 'CANCELLED':
+        return CustomColors.rejected;
+      case 'UPCOMING':
+        return CustomColors.active;
+      case 'COMPLETED':
+        return CustomColors.success;
+      case 'PENDING':
+        return CustomColors.pending;
+      default:
+        return CustomColors.blackColor;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -59,7 +74,16 @@ class _InfoColumn extends StatelessWidget {
           fontWeight: FontWeight.w400,
         ),
         Space.height.v5,
-        TextWidget(value),
+        TextWidget(
+          value,
+          color: _getValueColor(),
+          fontWeight: value.toUpperCase() == 'CANCELLED' ||
+              value.toUpperCase() == 'UPCOMING' ||
+              value.toUpperCase() == 'COMPLETED' ||
+              value.toUpperCase() == 'PENDING'
+              ? FontWeight.w600
+              : FontWeight.w500,
+        ),
       ],
     );
   }
