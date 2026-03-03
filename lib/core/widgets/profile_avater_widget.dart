@@ -65,7 +65,7 @@ class ProfileAvatarWidget extends StatelessWidget {
           child: Icon(
             Icons.image_not_supported,
             color: Colors.grey,
-            size: 20.h,
+            size: size.h,
           ),
         ),
       );
@@ -82,7 +82,7 @@ class ProfileAvatarWidget extends StatelessWidget {
         child: Icon(
           Icons.person,
           color: Colors.white,
-          size: 20.h,
+          size: size,
         ),
       );
     }

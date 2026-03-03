@@ -193,8 +193,7 @@
                                 ),
                                 Space.width.v5,
                                 GestureDetector(
-                                  onTap: () =>
-                                      controller.removeAllergy(i),
+                                  onTap: () => controller.removeAllergy(i),
                                   child: Icon(
                                     Icons.close,
                                     size: Dimensions.iconSizeDefault,

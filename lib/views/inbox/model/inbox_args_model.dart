@@ -1,23 +1,22 @@
 class InboxArgsModel {
   final String receiverId;
-  final String avatar;
-  final String name;
-  final bool isOnline;
+  final String? appointmentId;
+  final String? avatar;
+  final String? name;
 
   InboxArgsModel({
     required this.receiverId,
-    required this.avatar,
-    required this.name,
-    required this.isOnline,
+    this.appointmentId,
+    this.avatar,
+    this.name,
   });
 
-  factory InboxArgsModel.fromMap(Map<String, dynamic>? arg) {
-    arg ??= {};
+  factory InboxArgsModel.fromMap(Map<String, dynamic> map) {
     return InboxArgsModel(
-      receiverId: arg['receiverId'] ?? '0',
-      avatar: arg['avatar'] ?? '',
-      name: arg['name'] ?? 'Unknown',
-      isOnline: arg['isOnline'] ?? false,
+      receiverId: map['receiverId'] ?? '',
+      appointmentId: map['appointmentId'],
+      avatar: map['avatar'],
+      name: map['name'],
     );
   }
 }

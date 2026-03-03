@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:glady/core/api/services/api_request.dart';
 
 import '../../../core/utils/basic_import.dart';
+import '../../../core/widgets/loading_dialog.dart';
 import '../../../core/widgets/loading_widget.dart';
 import '../../../core/widgets/webview_screen.dart';
 import '../model/payment_model.dart';
@@ -25,22 +26,7 @@ class PaymentController extends GetxController {
   RxBool isLoading = false.obs;
 
   Future<void> makePayment() async {
-    Get.dialog(
-      const CupertinoAlertDialog(
-        content: Padding(
-          padding: EdgeInsets.only(top: 8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              LoadingWidget(),
-              SizedBox(height: 12),
-              Text('Please wait...'),
-            ],
-          ),
-        ),
-      ),
-      barrierDismissible: false,
-    );
+    LoadingDialog.show();
 
     try {
       await ApiRequest().post(
@@ -55,7 +41,7 @@ class PaymentController extends GetxController {
       );
     } catch (_) {
     } finally {
-      if (Get.isDialogOpen ?? false) Get.back();
+      LoadingDialog.hide();
     }
 
     if (paymentUrl.isNotEmpty) {

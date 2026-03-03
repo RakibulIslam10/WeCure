@@ -8,9 +8,11 @@ class AppointmentDetailsScreenMobile
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Obx(() {
-        if (controller.isLoading.value) return SizedBox.shrink();
+        if (controller.isLoading.value) return const SizedBox.shrink();
 
-        final currentStatus = AppStorage.isUser == 'USER'
+        final isUser = AppStorage.isUser == 'USER';
+
+        final currentStatus = isUser
             ? controller.userAppointmentDetailsModel.value?.data.status
             : controller.doctorAppointmentDetailsModel.value?.data.status;
 
@@ -25,8 +27,12 @@ class AppointmentDetailsScreenMobile
               children: [
                 Row(
                   children: [
-                    if (AppStorage.isUser != 'USER' &&
-                        currentStatus != 'CANCELLED') ...[
+                    /// ================================
+                    /// Reject Button (Only Doctor)
+                    /// ================================
+                    if (!isUser &&
+                        currentStatus != 'CANCELLED' &&
+                        currentStatus != 'COMPLETE') ...[
                       Expanded(
                         child: PrimaryButtonWidget(
                           outlineButton: true,
@@ -56,37 +62,94 @@ class AppointmentDetailsScreenMobile
                       ),
                       Space.width.v10,
                     ],
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: currentStatus == 'CANCELLED'
-                            ? () {}
-                            : () => Get.toNamed(Routes.inboxScreen),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: Dimensions.defaultHorizontalSize * 0.5,
-                            vertical: Dimensions.verticalSize * 0.55,
-                          ),
-                          decoration: BoxDecoration(
-                            color: currentStatus == 'CANCELLED'
-                                ? CustomColors.rejected
-                                : CustomColors.primary,
-                            borderRadius: BorderRadius.circular(
-                              Dimensions.radius,
+
+                    /// ================================
+                    /// Review Button (Only User + Complete)
+                    /// ================================
+                    if (isUser && currentStatus == 'COMPLETED') ...[
+                      Expanded(
+                        child: PrimaryButtonWidget(
+                          outlineButton: true,
+                          borderColor: CustomColors.primary,
+                          borderWidth: 1.5,
+                          onPressed: () {
+                            controller.showReviewDialog(context);
+                          },
+                          title: 'Review & Rating',
+                        ),
+                      ),
+
+                      Space.width.v20,
+
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: currentStatus == 'CANCELLED'
+                              ? () {}
+                              : () => Get.toNamed(Routes.inboxScreen),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  Dimensions.defaultHorizontalSize * 0.5,
+                              vertical: Dimensions.verticalSize * 0.55,
                             ),
-                          ),
-                          child: Center(
-                            child: TextWidget(
-                              currentStatus == 'CANCELLED'
-                                  ? 'Cancelled'
-                                  : 'Chat',
-                              color: CustomColors.whiteColor,
-                              fontSize: Dimensions.titleMedium,
-                              fontWeight: FontWeight.bold,
+                            decoration: BoxDecoration(
+                              color: currentStatus == 'CANCELLED'
+                                  ? CustomColors.rejected
+                                  : CustomColors.primary,
+                              borderRadius: BorderRadius.circular(
+                                Dimensions.radius,
+                              ),
+                            ),
+                            child: Center(
+                              child: TextWidget(
+                                currentStatus == 'CANCELLED'
+                                    ? 'Cancelled'
+                                    : 'Chat',
+                                color: CustomColors.whiteColor,
+                                fontSize: Dimensions.titleMedium,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                    ] else ...[
+                      /// ================================
+                      /// Chat / Cancelled Button
+                      /// ================================
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: currentStatus == 'CANCELLED'
+                              ? () {}
+                              : () => Get.toNamed(Routes.inboxScreen),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  Dimensions.defaultHorizontalSize * 0.5,
+                              vertical: Dimensions.verticalSize * 0.55,
+                            ),
+                            decoration: BoxDecoration(
+                              color: currentStatus == 'CANCELLED'
+                                  ? CustomColors.rejected
+                                  : CustomColors.primary,
+                              borderRadius: BorderRadius.circular(
+                                Dimensions.radius,
+                              ),
+                            ),
+                            child: Center(
+                              child: TextWidget(
+                                currentStatus == 'CANCELLED'
+                                    ? 'Cancelled'
+                                    : 'Chat',
+                                color: CustomColors.whiteColor,
+                                fontSize: Dimensions.titleMedium,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ],

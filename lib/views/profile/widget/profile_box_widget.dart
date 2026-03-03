@@ -55,7 +55,7 @@ class ProfileBoxWidget extends GetView<ProfileController> {
 
           ProfileAvatarWidget(
             imageUrl: controller.userProfileModel?.data.profileImage ?? ''  ,
-            size: 100,
+            size: 100.sp,
           ),
           Space.height.v10,
           Wrap(
@@ -79,7 +79,7 @@ class ProfileBoxWidget extends GetView<ProfileController> {
                 ),
                 onPressed: () {},
                 child: TextWidget(
-                  controller.userProfileModel?.data.bloodGroup ?? '',
+                  controller.userProfileModel?.data.bloodGroup ?? 'N/A',
                   fontSize: Dimensions.titleSmall * 0.9,
                   color: CustomColors.primary,
                 ),
@@ -89,7 +89,7 @@ class ProfileBoxWidget extends GetView<ProfileController> {
           TextWidget(
             controller.userProfileModel?.data.dateOfBirth != null
                 ? DateFormat('dd - MMM - yyyy').format(controller.userProfileModel!.data.dateOfBirth!)
-                : '-',
+                : 'N/A',
             fontSize: Dimensions.titleSmall,
             color: Colors.black.withOpacity(0.7),
           ),
@@ -104,7 +104,6 @@ class ProfileBoxWidget extends GetView<ProfileController> {
             crossAxisAlignment: crossStart,
             children: [
               TextWidget('Allergies'),
-
               Space.height.v10,
               Wrap(
                 children: List.generate(
@@ -300,7 +299,6 @@ class DoctorProfileBox extends GetView<ProfileController> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: CustomColors.primary,
-
                           borderRadius: BorderRadius.circular(
                             Dimensions.radius,
                           ),

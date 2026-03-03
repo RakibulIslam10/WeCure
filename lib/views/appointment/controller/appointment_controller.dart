@@ -74,11 +74,14 @@ class AppointmentController extends GetxController {
     );
   }
 
-  void openChat(String appointmentId) {
+  void openChat(Appointments appointment) {
     Get.toNamed(
       Routes.inboxScreen,
       arguments: {
-        'appointmentId': appointmentId,
+        'receiverId': appointment.id,
+        'appointmentId': appointment.id,
+        'name': appointment.doctorName,
+        'avatar': '',
       },
     );
   }

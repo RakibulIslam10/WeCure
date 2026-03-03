@@ -71,4 +71,112 @@ class AppointmentDetailsController extends GetxController {
       },
     );
   }
+
+
+
+  //Review
+
+  RxInt rating = 0.obs;
+  TextEditingController feedbackController = TextEditingController();
+
+  void setRating(int value) {
+    rating.value = value;
+  }
+
+  void submitReview() {
+    if (rating.value == 0) {
+      Get.snackbar('Error', 'Please select rating');
+      return;
+    }
+
+    // TODO: API call here
+    print("Rating: ${rating.value}");
+    print("Feedback: ${feedbackController.text}");
+
+    Get.back();
+  }
+
+  void showReviewDialog(BuildContext context) {
+
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Dimensions.radius * 1.5),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(Dimensions.defaultHorizontalSize),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+              /// Title
+              TextWidget(
+                'How Was Your Doctor',
+                fontSize: Dimensions.titleLarge,
+                fontWeight: FontWeight.bold,
+              ),
+
+              Space.height.v20,
+
+              /// Star Rating
+              Obx(
+                    () => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(5, (index) {
+                    final starIndex = index + 1;
+                    return GestureDetector(
+                      onTap: () => setRating(starIndex),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 6.w),
+                        child: Icon(
+                          Icons.star,
+                          size: 30.w,
+                          color: rating.value >= starIndex
+                              ? CustomColors.primary
+                              : Colors.grey.shade400,
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+
+              Space.height.v20,
+
+              /// Feedback Field
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12.w,
+                  vertical: 8.h,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius:
+                  BorderRadius.circular(Dimensions.radius),
+                ),
+                child: TextField(
+                  controller: feedbackController,
+                  maxLines: 4,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Write Your Feedback",
+                  ),
+                ),
+              ),
+
+              Space.height.v20,
+
+              /// Submit Button
+              PrimaryButtonWidget(
+                onPressed: submitReview,
+                title: 'Submit',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
 }

@@ -16,7 +16,7 @@ class CustomSnackBar {
         backgroundColor: CustomColors.primary,
         snackStyle: SnackStyle.FLOATING,
         snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 1),
         margin: EdgeInsets.symmetric(
           horizontal: Dimensions.defaultHorizontalSize * 0.7,
           vertical: Dimensions.verticalSize * 0.3,

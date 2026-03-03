@@ -14,6 +14,7 @@ class PaymentScreenMobile extends GetView<PaymentController> {
     return Scaffold(
       bottomNavigationBar: PrimaryButtonWidget(
         title: 'Make payment',
+
         onPressed: () {
           controller.makePayment();
         },
@@ -22,7 +23,7 @@ class PaymentScreenMobile extends GetView<PaymentController> {
           vertical: Dimensions.verticalSize,
         ),
       ),
-      appBar: CommonAppBar(title: "Payment"),
+      appBar: CommonAppBar(title: "Payment",),
       body: SafeArea(
         child: ListView(
           padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
