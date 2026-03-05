@@ -2,6 +2,7 @@ import '../../../core/utils/app_storage.dart';
 import '../../../core/utils/basic_import.dart';
 import '../../../core/api/services/api_request.dart';
 import '../../../core/api/end_point/api_end_points.dart';
+import '../model/chatting_info_model.dart';
 import '../model/doctor_appoinment_model.dart';
 import '../model/user_all_appoinment.dart';
 
@@ -34,15 +35,14 @@ class AppointmentController extends GetxController {
       isLoading: isUserLoading,
       onSuccess: (result) {
         userAppointments.value = result;
-        // print('************************************');
-        // print('************************************');
-        // print('************************************');
         for (var a in result.data) {
           print('Appointment: ${a.id} | Status: ${a.status}');
         }
       },
     );
   }
+
+
 
   Future<void> fetchDoctorAppointments() async {
     await ApiRequest().get(
@@ -60,7 +60,8 @@ class AppointmentController extends GetxController {
 
     if (status == 'ONGOING') {
       joinVideoCall(appointment.id);
-    } else if (status == 'COMPLETED' || status == 'CANCELLED' ||status == 'UPCOMING') {
+    } else if (status == 'COMPLETED' || status == 'CANCELLED' ||
+        status == 'UPCOMING') {
       Get.toNamed(Routes.appointmentDetailsScreen, arguments: appointment.id);
     } else {
       openChat(appointment.id);
@@ -69,8 +70,8 @@ class AppointmentController extends GetxController {
 
   void joinVideoCall(String appointmentId) {
     Get.toNamed(
-      Routes.videoCallScreen,
-      arguments: appointmentId
+        Routes.videoCallScreen,
+        arguments: appointmentId
     );
   }
 
@@ -85,17 +86,6 @@ class AppointmentController extends GetxController {
       },
     );
   }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

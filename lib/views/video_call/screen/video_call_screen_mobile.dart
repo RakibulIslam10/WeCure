@@ -13,11 +13,11 @@ class VideoCallScreenMobile extends GetView<VideoCallController> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildControlButton(
-                icon: Icons.mark_chat_read_outlined,
-                onTap: () => Get.toNamed(Routes.inboxScreen),
-                backgroundColor: Colors.white.withOpacity(0.9),
-              ),
+              // _buildControlButton(
+              //   icon: Icons.mark_chat_read_outlined,
+              //   onTap: () => Get.toNamed(Routes.inboxScreen),
+              //   backgroundColor: Colors.white.withOpacity(0.9),
+              // ),
               _buildControlButton(
                 icon: Icons.cameraswitch,
                 onTap: controller.toggleCamera,
@@ -30,15 +30,15 @@ class VideoCallScreenMobile extends GetView<VideoCallController> {
                   backgroundColor: Colors.white.withOpacity(0.9),
                 ),
               ),
-              Obx(
-                    () => _buildControlButton(
-                  icon: controller.isCameraFlipped.value
-                      ? Icons.flip_camera_ios
-                      : Icons.flip_camera_android,
-                  onTap: controller.flipCamera,
-                  backgroundColor: Colors.white.withOpacity(0.9),
-                ),
-              ),
+              // Obx(
+              //       () => _buildControlButton(
+              //     icon: controller.isCameraFlipped.value
+              //         ? Icons.flip_camera_ios
+              //         : Icons.flip_camera_android,
+              //     onTap: controller.flipCamera,
+              //     backgroundColor: Colors.white.withOpacity(0.9),
+              //   ),
+              // ),
               _buildControlButton(
                 icon: Icons.call_end,
                 onTap: controller.endCall,

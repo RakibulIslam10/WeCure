@@ -4,6 +4,7 @@ import 'package:glady/core/api/services/api_request.dart';
 import 'package:glady/core/utils/app_storage.dart';
 
 import '../../../core/utils/basic_import.dart';
+import '../../appointment/model/chatting_info_model.dart';
 import '../model/appoinment_details_model.dart';
 import '../model/user_appoinment_details_model.dart';
 
@@ -21,7 +22,27 @@ class AppointmentDetailsController extends GetxController {
     } else {
       fetchDoctorAppointmentDetails();
     }
+
+    getChattingInfo(appointmentId);
   }
+
+  ChattingInfoModel? chattingInfoModel;
+  RxBool isLoadingInfo = false.obs;
+
+  Future<ChattingInfoModel> getChattingInfo(String appointmentId) async {
+    return await ApiRequest().get(
+      fromJson: ChattingInfoModel.fromJson,
+      endPoint: '/chat/messages-by-appointment',
+      queryParams: {
+        'appointmentId' : appointmentId
+      },
+      isLoading: isLoadingInfo,
+      onSuccess: (result) => chattingInfoModel = result,
+    );
+  }
+
+
+
 
   RxBool isLoading = false.obs;
   Rx<DoctorAppointmentDetailsModel?> doctorAppointmentDetailsModel =
@@ -50,7 +71,6 @@ class AppointmentDetailsController extends GetxController {
       endPoint: ApiEndPoints.userAppointmentDetails,
       isLoading: isLoading,
       id: appointmentId,
-      showResponse: true,
       onSuccess: (result) {
         userAppointmentDetailsModel.value = result;
       },
@@ -74,7 +94,6 @@ class AppointmentDetailsController extends GetxController {
   //Review
 
   RxBool isSubmit = false.obs;
-
 
   RxInt rating = 0.obs;
   TextEditingController feedbackController = TextEditingController();
@@ -109,9 +128,10 @@ class AppointmentDetailsController extends GetxController {
           title: 'Review Submitted',
           message: 'Thank you for your feedback.',
         );
-        },
+      },
     );
   }
+
   void showReviewDialog(BuildContext context) {
     Get.dialog(
       Dialog(
@@ -176,15 +196,13 @@ class AppointmentDetailsController extends GetxController {
 
               Space.height.v20,
               Obx(
-                    () => PrimaryButtonWidget(
+                () => PrimaryButtonWidget(
                   isLoading: isSubmit.value,
                   onPressed: submitReview,
                   title: 'Submit',
-                      
-                      
-                      
                 ),
-              ),            ],
+              ),
+            ],
           ),
         ),
       ),

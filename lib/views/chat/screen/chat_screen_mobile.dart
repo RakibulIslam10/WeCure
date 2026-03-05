@@ -120,7 +120,7 @@ class ChatScreenMobile extends StatelessWidget {
                               arguments: {
                                 'conversationId': item.id,
                                 'receiverId': participant?.id ?? '',
-                                'receiverRole': participant?.role ?? '', // ✅ added
+                                'receiverRole': participant?.role ?? '',
                                 'avatar': participant?.image ?? '',
                                 'name': participant?.name ?? '',
                               },

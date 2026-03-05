@@ -20,9 +20,8 @@ import '../../../core/utils/basic_import.dart';
       return  Expanded(
         child: Obx(() {
 
-          if (controller.isLoading.value && controller.messagesList.isEmpty) return InboxShimmerWidget();
-
-          if (controller.messagesList.isEmpty) return EmptyDataWidget();
+          if (controller.isLoading.value) return const InboxShimmerWidget();
+          if (!controller.isLoading.value && controller.messagesList.isEmpty) return EmptyDataWidget();
 
           return Stack(
             children: [
