@@ -18,19 +18,6 @@ class DoctorDetailsController extends GetxController {
     fetchAllDate();
   }
 
-  // Rating breakdown
-  final ratings = <RatingData>[
-    RatingData(stars: 5, count: 80),
-    RatingData(stars: 4, count: 20),
-    RatingData(stars: 3, count: 12),
-    RatingData(stars: 2, count: 6),
-    RatingData(stars: 1, count: 2),
-  ].obs;
-
-  int get totalRatings => ratings.fold(0, (sum, r) => sum + r.count);
-
-  double getPercentage(int count) =>
-      totalRatings > 0 ? count / totalRatings : 0.0;
 
   // Booking Dialog
   RxString selectedDate = ''.obs;
