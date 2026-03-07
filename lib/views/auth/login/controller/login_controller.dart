@@ -38,6 +38,7 @@ class LoginController extends GetxController {
       isLoading: isLoading,
       email: emailController.text,
       password: passwordController.text,
+
     );
   }
 }

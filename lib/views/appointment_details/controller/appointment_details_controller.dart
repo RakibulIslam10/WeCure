@@ -41,9 +41,6 @@ class AppointmentDetailsController extends GetxController {
   //   );
   // }
 
-
-
-
   RxBool isLoading = false.obs;
   Rx<DoctorAppointmentDetailsModel?> doctorAppointmentDetailsModel =
       Rx<DoctorAppointmentDetailsModel?>(null);

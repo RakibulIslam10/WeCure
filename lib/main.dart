@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:glady/views/splash/controller/splash_controller.dart';
+import 'core/api/services/push_notification_service.dart';
 import 'core/helpers/network_manager.dart';
 import 'core/utils/app_storage.dart';
 import 'core/utils/basic_import.dart';
@@ -14,6 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await NotificationService.init();
 
   await Initial.init();
   Get.put(NetworkChecker());

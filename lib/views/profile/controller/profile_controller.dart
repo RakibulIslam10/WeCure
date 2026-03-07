@@ -46,7 +46,9 @@ class ProfileController extends GetxController {
   RxBool isLoading = false.obs;
 
   Future<void> logoutProcess() async {
-    await AuthService.logoutService(isLoading: isLoading, callApi: true);
+    await AuthService.logoutService(
+
+        isLoading: isLoading, callApi: true);
   }
 
   RxBool getDoctorProfileLoading = false.obs;

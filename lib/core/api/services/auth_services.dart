@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:glady/core/api/services/push_notification_service.dart';
 import 'package:glady/views/auth/login/model/login_model.dart';
 import '../../../views/auth/otp/model/otp_verify_model.dart';
 import '../../utils/app_storage.dart';
@@ -52,6 +53,15 @@ class AuthService {
         );
         Get.offAllNamed(Routes.navigationScreen);
         log('✅ Login successful - Token saved');
+
+        // FCM Token পাঠাও
+        NotificationService.getToken().then((fcmToken) {
+          if (fcmToken != null) {
+            log('✅ FCM Token: $fcmToken');
+            NotificationService.sendTokenToServer(fcmToken);
+            AppStorage.save(temporaryToken: fcmToken);
+          }
+        });
       },
     );
   }
@@ -79,7 +89,7 @@ class AuthService {
     required String email,
     required String password,
     required String role,
-     String? doctorId,
+    String? doctorId,
     String? phone,
   }) async {
     Map<String, dynamic> inputBody = {
@@ -87,7 +97,7 @@ class AuthService {
       'email': email.trim(),
       'password': password,
       'role': role,
-      'doctorId' : doctorId
+      'doctorId': doctorId,
     };
 
     return await _api.post(
@@ -97,10 +107,9 @@ class AuthService {
       body: inputBody,
       showSuccessSnackBar: true,
       onSuccess: (result) {
-        Get.toNamed(Routes.verificationScreen,
-          arguments: {
-            "email": email.trim(),
-          },
+        Get.toNamed(
+          Routes.verificationScreen,
+          arguments: {"email": email.trim()},
         );
         log('✅ Registration successful - Token saved');
       },
@@ -143,7 +152,6 @@ class AuthService {
           isLoggedIn: true,
           token: result.data?.accessToken,
           isUser: result.data?.role,
-
         );
         print(result.data?.accessToken ?? '');
         if (result.data?.role == 'USER') {
@@ -369,7 +377,7 @@ class AuthService {
           fromJson: BasicSuccessModel.fromJson,
           endPoint: ApiEndPoints.logout,
           isLoading: isLoading ?? false.obs,
-          body: {},
+          body: {'token': AppStorage.temporaryToken},
           showSuccessSnackBar: showSuccessSnackBar,
         );
       }

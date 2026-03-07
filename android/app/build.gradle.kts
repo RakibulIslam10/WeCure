@@ -8,11 +8,10 @@ plugins {
 
 android {
     namespace = "com.health.we_cure"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-//        isCoreLibraryDesugaringEnabled = true  // এই line add করো
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -78,8 +77,4 @@ android {
 
 flutter {
     source = "../.."
-}
-
-dependencies {
-//    coreLibraryDesugaring("com.android.tools.desugar_jdk_libs:1.2.3")
 }
