@@ -49,5 +49,19 @@
     <string>Camera permission is required for video calls</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Microphone permission is required for video calls</string>
+
+    <!-- image_picker এর জন্য -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We Cure needs photo library access to upload profile and documents.</string>
+
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>We Cure needs permission to save photos to your library.</string>
+
+    <!-- firebase_messaging background notification এর জন্য -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>fetch</string>
+        <string>remote-notification</string>
+    </array>
   </dict>
 </plist>
