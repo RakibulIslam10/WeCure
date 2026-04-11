@@ -34,7 +34,6 @@ void main() async {
     }
     lastStatus = isConnected;
   });
-
   runApp(MyApp(hasInternet: hasInternet));
 }
 
