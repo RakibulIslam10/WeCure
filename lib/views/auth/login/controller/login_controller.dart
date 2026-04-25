@@ -16,6 +16,7 @@ class LoginController extends GetxController {
   final isPasswordValid = false.obs;
   final isPasswordVisible = false.obs;
   final rememberMe = false.obs;
+
   RxBool isLoading = false.obs;
 
   @override
@@ -29,6 +30,7 @@ class LoginController extends GetxController {
     // emailController.text = 'dr.uno@yopmail.com';
     // emailController.text = 'user.uno@yopmail.com';
     // passwordController.text = 'securepass';
+
   }
 
   Future<LoginModel> loginProcess() async {

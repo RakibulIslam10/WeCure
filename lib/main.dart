@@ -14,9 +14,11 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await NotificationService.init();
 
+
   await Initial.init();
   Get.put(NetworkChecker());
   Get.put(SplashController());
+
 
   final hasInternet = await NetworkManager.hasConnection();
   bool? lastStatus = hasInternet;
